@@ -1,5 +1,3 @@
-file_content = """# User Stories: Multi-Währungsrechner-Webapp
-
 ## **Grundlegende Funktionen**
 
 1. **Währungsumrechnung**
@@ -23,9 +21,3 @@ file_content = """# User Stories: Multi-Währungsrechner-Webapp
    - *Als Nutzer möchte ich zusätzliche Gebühren (z. B. Bankgebühren) eingeben können, damit ich den tatsächlichen Umrechnungsbetrag sehe.*
 """
 
-file_path = "Multi-Währungsrechner-Webapp-User-Stories.md"
-
-with open(file_path, "w", encoding="utf-8") as file:
-    file.write(file_content)
-
-file_path
