@@ -1,0 +1,31 @@
+enum Currency {
+    USD
+    EUR
+    GBP
+}
+
+enum Category {
+    FOOD
+    TRANSPORT
+    ENTERTAINMENT
+}
+
+# Expense type
+type Expense {
+    id: ID!
+    user: Int!
+    category: String
+    value: Int!
+    currency: String!
+}
+
+# Query types
+type Query {
+    ExpenseById(id: ID): Expense!
+}
+
+# Mutation types
+type Mutation {
+    addExpense(user: Int!, category: String, value: Int!, currency: String!): Expense!
+}
+
