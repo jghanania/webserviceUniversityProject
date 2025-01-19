@@ -5,15 +5,20 @@ import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This class represents an expense entry in the system.
+ * It contains information about the user, category, value, and currency of an expense.
+ * Implements Serializable to allow it to be serialized if needed for communication or persistence.
+ */
 public class Expense implements Serializable {
 
     private static final Logger log = LoggerFactory.getLogger(Expense.class);
 
-    private long id;
-    private long user; // User ID
-    private String category;
-    private long value;
-    private String currency;
+    private long id;           // Unique identifier for the expense
+    private long user;         // User associated with the expense
+    private String category;   // Category of the expense (e.g., "Food", "Entertainment")
+    private long value;        // Value of the expense (in the specified currency)
+    private String currency;   // Currency of the expense (e.g., "USD", "EUR")
 
     // Default constructor
     public Expense() {
@@ -72,7 +77,7 @@ public class Expense implements Serializable {
         this.currency = currency;
     }
 
-    // Override equals method
+    // Override equals method to compares two Expense objects. Returns true if all fields are equal.
     @Override
     public boolean equals(Object object) {
         if (object == null) 

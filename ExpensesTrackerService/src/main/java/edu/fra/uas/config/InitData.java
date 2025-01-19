@@ -8,6 +8,11 @@ import edu.fra.uas.model.Expense;
 import edu.fra.uas.service.ExpenseService;
 import jakarta.annotation.PostConstruct;
 
+/**
+ * This class is responsible for initializing mock data in the application.
+ * It runs automatically during application startup to populate the system
+ * with predefined sample expenses.
+ */
 @Component
 public class InitData {
 
@@ -20,13 +25,14 @@ public class InitData {
     public void init() {
         log.debug("### Initialize Data ###");
 
+        // Creating and adding predefined expenses to the system
         log.debug("create expense 1");
         Expense expense = new Expense();
-        expense.setCategory("ENTERTAINMENT");
-        expense.setCurrency("EUR");
-        expense.setUser(1);
-        expense.setValue(100);
-        expenseService.createExpense(expense);
+        expense.setCategory("ENTERTAINMENT"); // Setting the category
+        expense.setCurrency("EUR");          // Setting the currency
+        expense.setUser(1);                  // Setting the user ID
+        expense.setValue(100);               // Setting the value
+        expenseService.createExpense(expense); // Adding the expense to the service
 
         log.debug("create expense 1");
         expense = new Expense();
