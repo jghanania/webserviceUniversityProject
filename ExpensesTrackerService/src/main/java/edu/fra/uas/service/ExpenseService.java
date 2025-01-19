@@ -66,18 +66,30 @@ public class ExpenseService {
 
     public List<CategoryTotal> getTotalExpensesByCategory() {
         log.debug("getTotalExpensesByCategory");
-        Map<String, Long> categoryTotals = new HashMap<>();
+    
+        // Map to hold category-currency pairs and their totals
+        Map<String, Long> categoryCurrencyTotals = new HashMap<>();
+    
         for (Expense expense : expenseRepository.values()) {
-            categoryTotals.put(
-                expense.getCategory(),
-                categoryTotals.getOrDefault(expense.getCategory(), 0L) + expense.getValue()
+            // Create a unique key combining category and currency
+            String key = expense.getCategory() + "|" + expense.getCurrency();
+            categoryCurrencyTotals.put(
+                key,
+                categoryCurrencyTotals.getOrDefault(key, 0L) + expense.getValue()
             );
         }
+    
+        // Convert the map entries into CategoryTotal objects
         List<CategoryTotal> totals = new ArrayList<>();
-        for (Map.Entry<String, Long> entry : categoryTotals.entrySet()) {
-            totals.add(new CategoryTotal(entry.getKey(), entry.getValue()));
+        for (Map.Entry<String, Long> entry : categoryCurrencyTotals.entrySet()) {
+            String[] keyParts = entry.getKey().split("\\|");
+            String category = keyParts[0];
+            String currency = keyParts[1];
+            totals.add(new CategoryTotal(category, currency, entry.getValue()));
         }
+    
         return totals;
     }
+    
     
 }

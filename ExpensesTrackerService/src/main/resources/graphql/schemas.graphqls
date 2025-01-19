@@ -22,8 +22,10 @@ type Expense {
 # type for category total
 type CategoryTotal {
     category: String!
+    currency: String!
     totalValue: Int!
 }
+
 
 
 type Query {
