@@ -1,0 +1,19 @@
+# Maven- und Build-Dateien
+target/
+*.jar
+*.war
+
+# IDE-spezifische Dateien
+.idea/
+*.iml
+.vscode/
+
+# Betriebssystemspezifisch
+.DS_Store
+Thumbs.db
+
+# Umgebungskonfigurationsdateien
+.env
+
+# Protokolldateien
+*.log
