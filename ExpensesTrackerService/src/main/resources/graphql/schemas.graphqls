@@ -19,12 +19,19 @@ type Expense {
     currency: String!
 }
 
-# Query types
-type Query {
-    ExpenseById(id: ID): Expense!
+# type for category total
+type CategoryTotal {
+    category: String!
+    totalValue: Int!
 }
 
-# Mutation types
+
+type Query {
+    ExpenseById(id: ID): Expense!
+    expensesFromCategories(categories: [String!]!): [Expense!]!
+    totalExpensesByCategory: [CategoryTotal!]!
+}
+
 type Mutation {
     addExpense(user: Int!, category: String, value: Int!, currency: String!): Expense!
 }

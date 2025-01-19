@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.fra.uas.model.CategoryTotal;
 import edu.fra.uas.model.Expense;
 import edu.fra.uas.service.ExpenseService;;
 
@@ -27,11 +28,23 @@ public class ExpensesController {
     private ExpenseService expenseService;
 
 
-
-    @QueryMapping(name="userById")
+    @QueryMapping(name="ExpenseById")
     public Expense getExpenseById(@Argument Long id) {
         log.debug("getExpenseById() is called");
         return expenseService.getExpenseById(id);
+    }
+
+    @QueryMapping
+    public List<Expense> expensesFromCategories(@Argument List<String> categories) {
+        log.debug("expensesFromCategories() is called with categories: {}", categories);
+        return expenseService.getExpensesFromCategories(categories);
+    }
+
+
+    @QueryMapping
+    public List<CategoryTotal> totalExpensesByCategory() {
+        log.debug("totalExpensesByCategory() is called");
+        return expenseService.getTotalExpensesByCategory();
     }
 
     @MutationMapping
