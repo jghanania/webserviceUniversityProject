@@ -39,6 +39,7 @@ public class ExpenseService {
     public Expense createExpense(Expense expense) {
         expense.setId(nextExpenseId++); // Assign a unique ID to the new expense
         log.debug("createExpense: " + expense);
+
         expenseRepository.put(expense.getId(), expense); // Save the expense in the repository
         return expenseRepository.get(expense.getId()); // Return the saved expense
     }
@@ -50,6 +51,7 @@ public class ExpenseService {
      */
     public Iterable<Expense> getAllExpenses() {
         log.debug("getAllExpenses");
+
         return expenseRepository.values();
     }
 
@@ -61,6 +63,7 @@ public class ExpenseService {
      */
     public Expense getExpenseById(long id) {
         log.debug("getExpense: " + id);
+
         return expenseRepository.get(id);
     }
 
@@ -72,6 +75,7 @@ public class ExpenseService {
      */
     public Expense updateExpense(Expense expense) {
         log.debug("updateExpense: " + expense);
+
         expenseRepository.put(expense.getId(), expense); // Replace the old expense with the updated one
         return expenseRepository.get(expense.getId());
     }
@@ -84,6 +88,7 @@ public class ExpenseService {
      */
     public Expense deleteExpense(long id) {
         log.debug("deleteExpense: " + id);
+
         return expenseRepository.remove(id); // Remove the expense from the repository and return it
     }
 
@@ -93,12 +98,13 @@ public class ExpenseService {
      * @param categories The list of categories to filter expenses by.
      * @return A list of expenses belonging to the specified categories.
      */
-    public List<Expense> getExpensesFromCategories(List<String> categories) {
-        log.debug("getExpensesFromCategories: " + categories);
+    public List<Expense> getExpensesFromCategories(List<String> categories, int user) {
+        log.debug("getExpensesFromCategoriesForUser: {}, user: {}", categories, user);
+
         List<Expense> filteredExpenses = new ArrayList<>(); // List to store filtered expenses
         for (Expense expense : expenseRepository.values()) {
             // If the expense category is in the list of specified categories, add it to the list
-            if (categories.contains(expense.getCategory())) {
+            if (categories.contains(expense.getCategory()) && expense.getUser() == user) {
                 filteredExpenses.add(expense);
             }
         }
@@ -114,21 +120,24 @@ public class ExpenseService {
      * 
      * @return A list of CategoryTotal objects, each representing the total value of expenses by category and currency.
      */
-    public List<CategoryTotal> getTotalExpensesByCategory() {
-        log.debug("getTotalExpensesByCategory");
+    public List<CategoryTotal> getTotalExpensesByCategory(int user) {
+        log.debug("getTotalExpensesByCategoryForUser: user: {}", user);
         
         // Map to hold the total expenses grouped by category and currency
         Map<String, Long> categoryCurrencyTotals = new HashMap<>();
     
         // Iterate through all expenses and aggregate their values by category and currency
         for (Expense expense : expenseRepository.values()) {
-            // Create a unique key combining the category and currency to group the totals
-            String key = expense.getCategory() + "|" + expense.getCurrency();
-            // Update the total for the category-currency pair
-            categoryCurrencyTotals.put(
-                key,
-                categoryCurrencyTotals.getOrDefault(key, 0L) + expense.getValue()
-            );
+            if (expense.getUser() == user) {
+                // Create a unique key combining the category and currency to group the totals
+                String key = expense.getCategory() + "|" + expense.getCurrency();
+                // Update the total for the category-currency pair
+                categoryCurrencyTotals.put(
+                    key,
+                    categoryCurrencyTotals.getOrDefault(key, 0L) + expense.getValue()
+                );
+            }
+
         }
     
         // Convert the map entries into CategoryTotal objects

@@ -50,10 +50,9 @@ public class ExpensesController {
      * @return A list of expenses in the specified categories.
      */
     @QueryMapping(name = "expensesFromCategories")
-    public List<Expense> getExpensesFromCategories(@Argument List<String> categories) {
-        log.debug("getExpensesFromCategories() is called with categories: {}", categories);
-
-        return expenseService.getExpensesFromCategories(categories);
+    public List<Expense> getExpensesFromCategories(@Argument List<String> categories, @Argument int user) {
+        log.debug("getExpensesFromCategories() is called with categories: {}, user: {}", categories, user);
+        return expenseService.getExpensesFromCategories(categories, user);
     }
 
     /**
@@ -63,10 +62,9 @@ public class ExpensesController {
      * @return A list of category totals, each including the category, currency, and total value.
      */
     @QueryMapping(name = "totalExpensesByCategory")
-    public List<CategoryTotal> getTotalExpensesByCategory() {
-        log.debug("getTotalExpensesByCategory() is called");
-
-        return expenseService.getTotalExpensesByCategory();
+    public List<CategoryTotal> getTotalExpensesByCategory(@Argument int user) {
+        log.debug("getTotalExpensesByCategory() is called with user: {}", user);
+        return expenseService.getTotalExpensesByCategory(user);
     }
 
     /**
