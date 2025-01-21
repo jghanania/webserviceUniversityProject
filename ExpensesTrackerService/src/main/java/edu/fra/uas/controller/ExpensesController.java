@@ -52,6 +52,7 @@ public class ExpensesController {
     @QueryMapping(name = "expensesFromCategories")
     public List<Expense> getExpensesFromCategories(@Argument List<String> categories, @Argument int user) {
         log.debug("getExpensesFromCategories() is called with categories: {}, user: {}", categories, user);
+
         return expenseService.getExpensesFromCategories(categories, user);
     }
 
@@ -64,6 +65,7 @@ public class ExpensesController {
     @QueryMapping(name = "totalExpensesByCategory")
     public List<CategoryTotal> getTotalExpensesByCategory(@Argument int user) {
         log.debug("getTotalExpensesByCategory() is called with user: {}", user);
+        
         return expenseService.getTotalExpensesByCategory(user);
     }
 
