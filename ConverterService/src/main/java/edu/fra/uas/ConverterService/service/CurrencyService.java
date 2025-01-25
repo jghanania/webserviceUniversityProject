@@ -25,7 +25,7 @@ public class CurrencyService {
     public Map<String, String> getSupportedCurrencies() {
         RestTemplate restTemplate = new RestTemplate();
 
-        // Anfrage an die API
+        // Anfrage an die Currency Layer API um Umrechnungskurse zu bekommen
         @SuppressWarnings("unchecked")
         Map<String, Object> response = restTemplate.getForObject(CURRENCYLAYER_API_LIST_URL, Map.class);
 
