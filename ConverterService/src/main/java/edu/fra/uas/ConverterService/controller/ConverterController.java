@@ -34,9 +34,19 @@ public class ConverterController {
      */
     @GetMapping("/convert")
     public double convertCurrency(
-            @RequestParam String from,
-            @RequestParam String to,
+            @RequestParam String fromCurrency,
+            @RequestParam String toCurrency,
             @RequestParam double amount) {
-        return currencyService.convertCurrency(from, to, amount);
+        return currencyService.convertCurrency(fromCurrency, toCurrency, amount);
+    }
+
+    /**
+     * Endpunkt: Multiple Conversion
+     */
+    @GetMapping("/convertToMultipleCurrencies")
+    public Map<String, Double> convertToMultipleCurrencies(
+            @RequestParam String fromCurrency,
+            @RequestParam Double amount) {
+        return currencyService.convertToMultiple(fromCurrency, amount);
     }
 }
