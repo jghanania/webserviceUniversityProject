@@ -25,33 +25,66 @@ public class ApiGatewayController {
     @Autowired
     private ConverterService converterService;
     
-     // Get a specific expense using GraphQL from ExpenseService
+    // Get a specific expense using GraphQL from ExpenseService
     @GetMapping(value = "/user/{userId}/expenses/{expenseId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getExpense(@PathVariable("userId") Long userId, @PathVariable("expenseId") Long expenseId) throws Exception {
+    public ResponseEntity<?> getExpense(
+            @PathVariable("userId") Long userId,
+            @PathVariable("expenseId") Long expenseId,
+            @RequestParam(value = "currency", required = false) String currency) throws Exception {
+
         log.debug("Fetching expense with ID {} for user {}", expenseId, userId);
+
         // Call the ExpenseService's GraphQL endpoint to fetch the expense
         Expense expense = expenseService.getExpenseById(userId, expenseId);
+
+        // If currency is provided, modify the expense by converting it
+        if (currency != null && !currency.isEmpty()) {
+            log.debug("Converting expense to currency {}", currency);
+            expense = converterService.convert(expense, currency);
+        }
+
+        // Return the expense in the response
         return ResponseEntity.ok(expense);
     }
 
 
     // Get total expenses by category from ExpenseService
     @GetMapping(value = "/user/{userId}/categories/sum", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getTotalExpensesByCategory(@PathVariable("userId") Long userId) throws Exception {
+    public ResponseEntity<?> getTotalExpensesByCategory(
+            @PathVariable("userId") Long userId,
+            @RequestParam(value = "currency", required = false) String currency) throws Exception {
+        
         log.debug("Fetching total expenses by category for user {}", userId);
         // Call the ExpenseService to get total expenses by category
-        List<CategoryTotal> response =  expenseService.getTotalExpensesByCategory(userId);
+        List<CategoryTotal> response = expenseService.getTotalExpensesByCategory(userId);
+        
+        // If a currency is provided, convert the category totals
+        if (currency != null && !currency.isEmpty()) {
+            response = converterService.convertCategoryTotals(response, currency);
+        }
+
         return ResponseEntity.ok(response);
     }
 
     // Get expenses for a specific category from ExpenseService
     @GetMapping(value = "/user/{userId}/categories/{category}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getExpensesByCategory(@PathVariable("userId") Long userId, @PathVariable("category") String category) throws Exception {
+    public ResponseEntity<?> getExpensesByCategory(
+            @PathVariable("userId") Long userId, 
+            @PathVariable("category") String category, 
+            @RequestParam(value = "currency", required = false) String currency) throws Exception {
+        
         log.debug("Fetching expenses for category {} for user {}", category, userId);
         // Call the ExpenseService to fetch expenses by category
         List<Expense> response = expenseService.getExpensesByCategory(userId, category);
+
+        // If a currency is provided, convert the expenses
+        if (currency != null && !currency.isEmpty()) {
+            response = converterService.convertExpenses(response, currency);
+        }
+
         return ResponseEntity.ok(response);
     }
+
 
     // Create a new expense via GraphQL mutation in ExpenseService
     @PostMapping(value = "/user/{userId}/expenses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
