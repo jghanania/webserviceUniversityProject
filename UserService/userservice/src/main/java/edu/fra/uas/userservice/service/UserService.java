@@ -2,7 +2,6 @@ package edu.fra.uas.userservice.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.fra.uas.userservice.model.User;
@@ -13,7 +12,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
+
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -35,3 +34,4 @@ public class UserService {
         return userRepository.findAll();
     }
 }
+
