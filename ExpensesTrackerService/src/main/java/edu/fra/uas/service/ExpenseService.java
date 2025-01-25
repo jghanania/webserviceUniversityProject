@@ -124,7 +124,7 @@ public class ExpenseService {
         log.debug("getTotalExpensesByCategoryForUser: user: {}", user);
         
         // Map to hold the total expenses grouped by category and currency
-        Map<String, Long> categoryCurrencyTotals = new HashMap<>();
+        Map<String, Double> categoryCurrencyTotals = new HashMap<>();
     
         // Iterate through all expenses and aggregate their values by category and currency
         for (Expense expense : expenseRepository.values()) {
@@ -134,7 +134,7 @@ public class ExpenseService {
                 // Update the total for the category-currency pair
                 categoryCurrencyTotals.put(
                     key,
-                    categoryCurrencyTotals.getOrDefault(key, 0L) + expense.getValue()
+                    categoryCurrencyTotals.getOrDefault(key, 0D) + expense.getValue()
                 );
             }
 
@@ -142,7 +142,7 @@ public class ExpenseService {
     
         // Convert the map entries into CategoryTotal objects
         List<CategoryTotal> totals = new ArrayList<>();
-        for (Map.Entry<String, Long> entry : categoryCurrencyTotals.entrySet()) {
+        for (Map.Entry<String, Double> entry : categoryCurrencyTotals.entrySet()) {
             // Split the key into category and currency
             String[] keyParts = entry.getKey().split("\\|");
             String category = keyParts[0];

@@ -7,11 +7,11 @@ package edu.fra.uas.model;
 public class CategoryTotal {
     private String category;  // The category of the expenses (e.g., "Food", "Entertainment")
     private String currency;  // The currency of the expenses (e.g., "USD", "EUR")
-    private long totalValue;  // The total value of expenses for the given category and currency
+    private double totalValue;  // The total value of expenses for the given category and currency
 
 
     // Constructor with all fields
-    public CategoryTotal(String category, String currency, long totalValue) {
+    public CategoryTotal(String category, String currency, double totalValue) {
         this.category = category;
         this.currency = currency;
         this.totalValue = totalValue;
@@ -34,11 +34,11 @@ public class CategoryTotal {
         this.currency = currency;
     }
 
-    public long getTotalValue() {
+    public double getTotalValue() {
         return totalValue;
     }
 
-    public void setTotalValue(long totalValue) {
+    public void setTotalValue(double totalValue) {
         this.totalValue = totalValue;
     }
 }

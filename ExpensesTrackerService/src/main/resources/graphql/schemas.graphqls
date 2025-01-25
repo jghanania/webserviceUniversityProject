@@ -15,7 +15,7 @@ type Expense {
     id: ID!
     user: Int!
     category: String
-    value: Int!
+    value: Float!
     currency: String!
 }
 
@@ -23,7 +23,7 @@ type Expense {
 type CategoryTotal {
     category: String!
     currency: String!
-    totalValue: Int!
+    totalValue: Float!
 }
 
 
@@ -37,6 +37,6 @@ type Query {
 
 type Mutation {
     
-    addExpense(user: Int!, category: String, value: Int!, currency: String!): Expense!
+    addExpense(user: Int!, category: String, value: Float!, currency: String!): Expense!
 }
 
