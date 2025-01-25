@@ -3,18 +3,17 @@ package edu.fra.uas.ConverterService.service;
 import edu.fra.uas.ConverterService.model.CurrencyResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.Map;
 
+/**
+ * Währungsumrechnungsservice, welches die Geschäftslogik enthält.
+ * Unter anderem werden alle unterstützten Währungen gelistet 
+ * und eine Funktion zum Umrechnen von einer Ausgangswährung in eine Zielwährung. 
+ */
 @Service
 public class CurrencyService {
-
-    // Lade die .env Datei
-    private Dotenv dotenv = Dotenv.configure().load();
-    // Hole den API Key aus der .env File
-    private String apiKey = dotenv.get("API_KEY");
-
+    private String apiKey = "3a00ed58c0429e54c480e5cc4ee2d15a";
     private final String CURRENCYLAYER_API_LIST_URL = "https://api.currencylayer.com/list?access_key=" + apiKey;
     private final String CURRENCYLAYER_API_CONVERT_URL = "https://api.currencylayer.com/convert?access_key=" + apiKey;
 
@@ -26,7 +25,7 @@ public class CurrencyService {
     public Map<String, String> getSupportedCurrencies() {
         RestTemplate restTemplate = new RestTemplate();
 
-        // Anfrage an die API
+        // Anfrage an die Currency Layer API um Umrechnungskurse zu bekommen
         @SuppressWarnings("unchecked")
         Map<String, Object> response = restTemplate.getForObject(CURRENCYLAYER_API_LIST_URL, Map.class);
 
@@ -34,7 +33,7 @@ public class CurrencyService {
         return (Map<String, String>) response.get("currencies");
     }
 
-        /**
+    /**
      * Führt eine Umrechnung zwischen zwei Währungen durch.
      * @param from Die Quellwährung (z. B. "USD")
      * @param to Die Zielwährung (z. B. "EUR")
