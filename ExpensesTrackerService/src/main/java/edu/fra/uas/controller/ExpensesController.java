@@ -93,4 +93,30 @@ public class ExpensesController {
         // Save the expense using the service and return the result
         return expenseService.createExpense(expense);
     }
+    /**
+     * Handles the "allExpenses" GraphQL query.
+     * Retrieves all expenses stored in the repository.
+     *
+     * @return An iterable collection of all expenses.
+     */
+    @QueryMapping(name = "allExpenses")
+    public Iterable<Expense> getAllExpenses() {
+        log.debug("getAllExpenses() is called");
+
+        return expenseService.getAllExpenses();
+    }
+
+    /**
+     * Handles the "deleteExpense" GraphQL mutation.
+     * Deletes an expense by its ID.
+     *
+     * @param id The ID of the expense to delete.
+     * @return The deleted expense, or null if not found.
+     */
+    @MutationMapping
+    public Expense deleteExpense(@Argument Long id) {
+        log.debug("deleteExpense() is called with id: {}", id);
+
+        return expenseService.deleteExpense(id);
+    }
 }

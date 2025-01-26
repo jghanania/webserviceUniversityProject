@@ -29,14 +29,18 @@ type CategoryTotal {
 
 
 type Query {
-    ExpenseById(id: ID!): Expense!
-    expensesFromCategories(categories: [String!]!, user: Int!): [Expense!]!
-    totalExpensesByCategory(user: Int!): [CategoryTotal!]!
+  ExpenseById(id: ID!): Expense!
+  expensesFromCategories(categories: [String!]!, user: Int!): [Expense!]!
+  totalExpensesByCategory(user: Int!): [CategoryTotal!]!
+  allExpenses: [Expense!]!
 }
-
 
 type Mutation {
-    
-    addExpense(user: Int!, category: String, value: Float!, currency: String!): Expense!
+  addExpense(
+    user: Int!
+    category: String
+    value: Int!
+    currency: String!
+  ): Expense!
+  deleteExpense(id: ID!): Expense
 }
-
