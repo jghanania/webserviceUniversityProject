@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import edu.fra.uas.service.*;
 import edu.fra.uas.model.CategoryTotal;
 import edu.fra.uas.model.Expense;
+import edu.fra.uas.model.User;
+
 
 @RestController
 @RequestMapping("/api")
@@ -24,13 +26,52 @@ public class ApiGatewayController {
 
     @Autowired
     private ConverterService converterService;
-    
+
+    @Autowired
+    private UserService userService; 
+
+    // Get a list of all users
+    @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllUsers() {
+        log.debug("Fetching all users");
+        List<User> response = userService.getAllUsers(); // Call UserService to fetch all users
+        return ResponseEntity.ok(response);
+    }
+
+    // Get a specific user by ID
+    @GetMapping(value = "/users/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserById(@PathVariable("userId") Long userId) {
+        log.debug("Fetching user with ID {}", userId);
+        User response = userService.getUserById(userId); // Call UserService to fetch the user by ID
+        return ResponseEntity.ok(response);
+    }
+
+    // Create a new user
+    @PostMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addUser(@RequestBody User user) {
+        log.debug("Adding new user: {}", user);
+        User response = userService.addUser(user); // Call UserService to create a new user
+        return ResponseEntity.ok(response);
+    }
+
+    // Delete a user by ID
+    @DeleteMapping(value = "/users/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteUser(@PathVariable("userId") Long userId) {
+        log.debug("Deleting user with ID {}", userId);
+        userService.deleteUser(userId); // Call UserService to delete the user by ID
+        return ResponseEntity.noContent().build(); // Return HTTP 204 No Content on successful deletion
+    }
+
     // Get a specific expense using GraphQL from ExpenseService
-    @GetMapping(value = "/user/{userId}/expenses/{expenseId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/users/{userId}/expenses/{expenseId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getExpense(
             @PathVariable("userId") Long userId,
             @PathVariable("expenseId") Long expenseId,
             @RequestParam(value = "currency", required = false) String currency) throws Exception {
+
+
+        // Validate if the user exists
+        userService.validateUserExists(userId);
 
         log.debug("Fetching expense with ID {} for user {}", expenseId, userId);
 
@@ -49,11 +90,14 @@ public class ApiGatewayController {
 
 
     // Get total expenses by category from ExpenseService
-    @GetMapping(value = "/user/{userId}/categories/sum", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/users/{userId}/categories/sum", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTotalExpensesByCategory(
             @PathVariable("userId") Long userId,
             @RequestParam(value = "currency", required = false) String currency) throws Exception {
         
+        // Validate if the user exists
+        userService.validateUserExists(userId);
+
         log.debug("Fetching total expenses by category for user {}", userId);
         // Call the ExpenseService to get total expenses by category
         List<CategoryTotal> response = expenseService.getTotalExpensesByCategory(userId);
@@ -67,12 +111,15 @@ public class ApiGatewayController {
     }
 
     // Get expenses for a specific category from ExpenseService
-    @GetMapping(value = "/user/{userId}/categories/{category}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/users/{userId}/categories/{category}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getExpensesByCategory(
             @PathVariable("userId") Long userId, 
             @PathVariable("category") String category, 
             @RequestParam(value = "currency", required = false) String currency) throws Exception {
         
+        // Validate if the user exists
+        userService.validateUserExists(userId);
+
         log.debug("Fetching expenses for category {} for user {}", category, userId);
         // Call the ExpenseService to fetch expenses by category
         List<Expense> response = expenseService.getExpensesByCategory(userId, category);
@@ -87,12 +134,18 @@ public class ApiGatewayController {
 
 
     // Create a new expense via GraphQL mutation in ExpenseService
-    @PostMapping(value = "/user/{userId}/expenses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/users/{userId}/expenses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addExpense(@PathVariable("userId") Long userId, @RequestBody Expense expense) throws Exception {
+
+        // Validate if the user exists
+        userService.validateUserExists(userId);
+        
         log.debug("Adding new expense for user {}: {}", userId, expense);
         // Call ExpenseService's mutation to add a new expense
         Expense response = expenseService.addExpense(userId, expense);
         return ResponseEntity.ok(response);
     }
+
+    
 
 }
