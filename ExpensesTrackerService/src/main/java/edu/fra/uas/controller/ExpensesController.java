@@ -80,7 +80,7 @@ public class ExpensesController {
      * @return The newly created expense.
      */
     @MutationMapping
-    public Expense addExpense(@Argument int user, @Argument String category, @Argument int value, @Argument String currency) {
+    public Expense addExpense(@Argument int user, @Argument String category, @Argument double value, @Argument String currency) {
         log.debug("addExpense() is called with user: {}, category: {}, value: {}, currency: {}", user, category, value, currency);
 
         // Create a new Expense object and populate its fields
