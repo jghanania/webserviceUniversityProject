@@ -8,6 +8,7 @@ import edu.fra.uas.model.Expense;
 import edu.fra.uas.model.CategoryTotal;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,16 +57,9 @@ public class ConverterService {
      * @return The list of modified expenses with the updated values and currencies.
      */
     public List<Expense> convertExpenses(List<Expense> expenses, String targetCurrency) {
+        // Map over the list of expenses and convert each one
         return expenses.stream()
-                .map(expense -> {
-                    try {
-                        // Introduce delay between requests
-                        Thread.sleep(1000); // 5 seconds
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt(); // Handle the exception properly
-                    }
-                    return convert(expense, targetCurrency);
-                })
+                .map(expense -> convert(expense, targetCurrency))
                 .collect(Collectors.toList());
     }
 
@@ -77,17 +71,13 @@ public class ConverterService {
      * @return The list of modified category totals with the updated values and currencies.
      */
     public List<CategoryTotal> convertCategoryTotals(List<CategoryTotal> categoryTotals, String targetCurrency) {
-        return categoryTotals.stream()
-                .map(categoryTotal -> {
-                    try {
-                        // Introduce delay between requests
-                        Thread.sleep(1000); // 5 seconds
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt(); // Handle the exception properly
-                    }
-                    return convertCategoryTotal(categoryTotal, targetCurrency);
-                })
+        // Convert all CategoryTotal objects
+        List<CategoryTotal> converted = categoryTotals.stream()
+                .map(categoryTotal -> convertCategoryTotal(categoryTotal, targetCurrency))
                 .collect(Collectors.toList());
+
+        // Merge category totals with the same category and currency
+        return mergedCategoryTotals(converted);
     }
 
     /**
@@ -107,7 +97,7 @@ public class ConverterService {
         }
 
         // Build the REST request URL
-        String url = String.format("%s?fromCurrency=%s&toCurrency=%s&amount=%f", 
+        String url = String.format("%s?fromCurrency=%s&toCurrency=%s&amount=%f",
                 CONVERSION_SERVICE_URL, currentCurrency, targetCurrency, value);
 
         // Send the REST request and get the converted amount as a response
@@ -118,5 +108,31 @@ public class ConverterService {
         categoryTotal.setCurrency(targetCurrency);
 
         return categoryTotal;
+    }
+
+    /**
+     * Merges a list of CategoryTotal objects by summing their totalValue if they have
+     * the same category and currency.
+     *
+     * @param categoryTotals The list of category totals to merge.
+     * @return A merged list of category totals.
+     */
+    private List<CategoryTotal> mergedCategoryTotals(List<CategoryTotal> categoryTotals) {
+        // Group by category and currency, then sum the total values
+        Map<String, CategoryTotal> mergedMap = categoryTotals.stream()
+                .collect(Collectors.toMap(
+                        // Create a key combining category and currency
+                        ct -> ct.getCategory() + "_" + ct.getCurrency(),
+                        // Use the CategoryTotal as the initial value
+                        ct -> ct,
+                        // Merge function: sum the totalValue of duplicates
+                        (ct1, ct2) -> {
+                            ct1.setTotalValue(ct1.getTotalValue() + ct2.getTotalValue());
+                            return ct1;
+                        }
+                ));
+
+        // Return the merged CategoryTotal objects as a list
+        return mergedMap.values().stream().collect(Collectors.toList());
     }
 }
