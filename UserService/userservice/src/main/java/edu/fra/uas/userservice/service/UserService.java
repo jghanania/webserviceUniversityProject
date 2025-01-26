@@ -12,7 +12,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-
+// Konstruktor 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -33,5 +33,15 @@ public class UserService {
     public List<User> listUsers() {
         return userRepository.findAll();
     }
+
+    // Löschen User Id
+    public void deletUser(Long id) {
+        if(userRepository.existsById(id)){
+            userRepository.deleteById(id);
+        }else{
+            throw new IllegalArgumentException("User mit der ID" +id + "not found.");
+        }
+    }
+
 }
 
