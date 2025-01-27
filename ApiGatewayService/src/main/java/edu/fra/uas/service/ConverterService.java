@@ -1,6 +1,7 @@
 package edu.fra.uas.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,7 +18,9 @@ public class ConverterService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private static final String CONVERSION_SERVICE_URL = "http://localhost:8082/api/converter/convert";
+    // Get the service address from application.properties
+    @Value("${converterServiceUrl}")
+    private String converterServiceUrl;
 
     /**
      * Converts the currency of the given expense to the target currency.
@@ -37,7 +40,7 @@ public class ConverterService {
 
         // Build the REST request URL
         String url = String.format("%s?fromCurrency=%s&toCurrency=%s&amount=%f", 
-                CONVERSION_SERVICE_URL, currentCurrency, targetCurrency, value);
+                converterServiceUrl, currentCurrency, targetCurrency, value);
 
         // Send the REST request and get the converted amount as a response
         Double convertedValue = restTemplate.getForObject(url, Double.class);
@@ -98,7 +101,7 @@ public class ConverterService {
 
         // Build the REST request URL
         String url = String.format("%s?fromCurrency=%s&toCurrency=%s&amount=%f",
-                CONVERSION_SERVICE_URL, currentCurrency, targetCurrency, value);
+                converterServiceUrl, currentCurrency, targetCurrency, value);
 
         // Send the REST request and get the converted amount as a response
         Double convertedValue = restTemplate.getForObject(url, Double.class);

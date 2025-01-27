@@ -1,6 +1,7 @@
 package edu.fra.uas.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,7 +16,9 @@ public class UserService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private static final String USER_SERVICE_BASE_URL = "http://localhost:8083/users";
+    // Get the service address from application.properties
+    @Value("${userServiceUrl}")
+    private String userServiceUrl;
 
     /**
      * Fetch all users from the external user service.
@@ -24,7 +27,7 @@ public class UserService {
      */
     public List<User> getAllUsers() {
         // Send a GET request to the external user service
-        User[] users = restTemplate.getForObject(USER_SERVICE_BASE_URL, User[].class);
+        User[] users = restTemplate.getForObject(userServiceUrl, User[].class);
         return Arrays.asList(users); // Convert the array to a List
     }
 
@@ -36,7 +39,7 @@ public class UserService {
      */
     public User getUserById(Long userId) {
         // Build the URL for the user by ID
-        String url = String.format("%s/%d", USER_SERVICE_BASE_URL, userId);
+        String url = String.format("%s/%d", userServiceUrl, userId);
         return restTemplate.getForObject(url, User.class);
     }
 
@@ -48,7 +51,7 @@ public class UserService {
      */
     public User addUser(User user) {
         // Send a POST request to the external user service
-        return restTemplate.postForObject(USER_SERVICE_BASE_URL, user, User.class);
+        return restTemplate.postForObject(userServiceUrl, user, User.class);
     }
 
     /**
@@ -58,7 +61,7 @@ public class UserService {
      */
     public void deleteUser(Long userId) {
         // Build the URL for the user by ID
-        String url = String.format("%s/%d", USER_SERVICE_BASE_URL, userId);
+        String url = String.format("%s/%d", userServiceUrl, userId);
         // Send a DELETE request to the external user service
         restTemplate.delete(url);
     }

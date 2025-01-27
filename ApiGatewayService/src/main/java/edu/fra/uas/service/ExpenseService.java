@@ -21,7 +21,9 @@ public class ExpenseService {
     @Autowired
     private ObjectMapper objectMapper; // For dynamic deserialization
 
-    private String expenseServiceUrl = "http://localhost:8081";  // URL for expense service
+    // Get the service address from application.properties
+    @Value("${expenseServiceUrl}")
+    private String expenseServiceUrl;
 
     // Fetch an expense using GraphQL query
     public Expense getExpenseById(Long userId, Long expenseId) throws Exception {
