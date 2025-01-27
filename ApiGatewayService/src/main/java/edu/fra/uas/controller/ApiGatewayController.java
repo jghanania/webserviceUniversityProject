@@ -62,6 +62,30 @@ public class ApiGatewayController {
         return ResponseEntity.noContent().build(); // Return HTTP 204 No Content on successful deletion
     }
 
+    // Get all expenses for a user
+    @GetMapping(value = "/users/{userId}/expenses", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllExpensesForUser(
+            @PathVariable("userId") Long userId,
+            @RequestParam(value = "currency", required = false) String currency) throws Exception {
+
+        // Validate if the user exists
+        userService.validateUserExists(userId);
+
+        log.debug("Fetching all expenses for user {}", userId);
+
+        // Fetch all expenses from the ExpenseService
+        List<Expense> response = expenseService.getAllExpensesForUser(userId);
+
+        // If currency is provided, modify the expense by converting it
+        if (currency != null && !currency.isEmpty()) {
+            log.debug("Converting expense to currency {}", currency);
+            response = converterService.convertExpenses(response, currency);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+
     // Get a specific expense using GraphQL from ExpenseService
     @GetMapping(value = "/users/{userId}/expenses/{expenseId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getExpense(
@@ -146,6 +170,21 @@ public class ApiGatewayController {
         return ResponseEntity.ok(response);
     }
 
-    
+    // Delete an expense for a user
+    @DeleteMapping(value = "/users/{userId}/expenses/{expenseId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteExpense(
+            @PathVariable("userId") Long userId,
+            @PathVariable("expenseId") Long expenseId) throws Exception {
+
+        // Validate if the user exists
+        userService.validateUserExists(userId);
+
+        log.debug("Deleting expense with ID {} for user {}", expenseId, userId);
+
+        // Delete the expense via ExpenseService
+        Expense response = expenseService.deleteExpense(expenseId);
+
+        return ResponseEntity.ok(response);
+    }    
 
 }

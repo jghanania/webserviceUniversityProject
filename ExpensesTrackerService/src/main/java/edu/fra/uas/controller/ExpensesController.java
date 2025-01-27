@@ -29,17 +29,17 @@ public class ExpensesController {
     private ExpenseService expenseService;
 
     /**
-     * Handles the "ExpenseById" GraphQL query.
+     * Handles the "expenseById" GraphQL query.
      * Retrieves a specific expense by its ID.
      *
      * @param id The ID of the expense to retrieve.
      * @return The expense with the specified ID.
      */
-    @QueryMapping(name = "ExpenseById")
+    @QueryMapping(name = "expenseById")
     public Expense getExpenseById(@Argument Long id) {
         log.debug("getExpenseById() is called");
         
-        return expenseService.getExpenseById(id); 
+        return expenseService.getExpenseById(id);
     }
 
     /**
@@ -100,9 +100,12 @@ public class ExpensesController {
      * @return An iterable collection of all expenses.
      */
     @QueryMapping(name = "allExpenses")
-    public Iterable<Expense> getAllExpenses() {
-        log.debug("getAllExpenses() is called");
+    public Iterable<Expense> getAllExpenses(@Argument Integer user) {
+        log.debug("getAllExpenses() is called with user: {}", user);
 
+        if (user != null) {
+            return expenseService.getAllExpensesFromUser(user);
+        }
         return expenseService.getAllExpenses();
     }
 

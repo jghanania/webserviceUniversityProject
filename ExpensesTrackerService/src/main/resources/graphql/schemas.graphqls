@@ -29,10 +29,10 @@ type CategoryTotal {
 
 
 type Query {
-  ExpenseById(id: ID!): Expense!
+  expenseById(id: ID!): Expense!
   expensesFromCategories(categories: [String!]!, user: Int!): [Expense!]!
   totalExpensesByCategory(user: Int!): [CategoryTotal!]!
-  allExpenses: [Expense!]!
+  allExpenses(user: Int): [Expense!]!
 }
 
 type Mutation {

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.fra.uas.model.Expense;
 import edu.fra.uas.model.CategoryTotal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -28,15 +29,32 @@ public class ExpenseService {
     // Fetch an expense using GraphQL query
     public Expense getExpenseById(Long userId, Long expenseId) throws Exception {
         String query = String.format(
-            "{\"query\":\"query MyQuery {\\n  ExpenseById(id: \\\"%d\\\") {\\n    category\\n    currency\\n    id\\n    user\\n    value\\n  }\\n}\",\"operationName\":\"MyQuery\"}",
+            "{\"query\":\"query MyQuery {\\n  expenseById(id: \\\"%d\\\") {\\n    category\\n    currency\\n    id\\n    user\\n    value\\n  }\\n}\",\"operationName\":\"MyQuery\"}",
             expenseId
         );
 
         Map<String, Object> response = executeGraphQL(query);
 
-        // Extract ExpenseById from the response
+        // Extract expenseById from the response
         Map<String, Object> data = (Map<String, Object>) response.get("data");
-        return objectMapper.convertValue(data.get("ExpenseById"), Expense.class);
+        return objectMapper.convertValue(data.get("expenseById"), Expense.class);
+    }
+
+    // Fetch all expenses for a user
+    public List<Expense> getAllExpensesForUser(Long userId) throws Exception {
+        String query = String.format(
+            "{\"query\":\"query MyQuery {\\n  allExpenses(user: %d) {\\n    category\\n    id\\n    currency\\n    user\\n    value\\n  }\\n}\",\"operationName\":\"MyQuery\"}",
+            userId
+        );
+
+        Map<String, Object> response = executeGraphQL(query);
+
+        // Extract allExpenses from the response
+        Map<String, Object> data = (Map<String, Object>) response.get("data");
+        return objectMapper.convertValue(
+            data.get("allExpenses"),
+            new TypeReference<List<Expense>>() {}
+        );
     }
 
     // Fetch total expenses by category
@@ -85,6 +103,20 @@ public class ExpenseService {
         // Extract the new Expense from the response
         Map<String, Object> data = (Map<String, Object>) response.get("data");
         return objectMapper.convertValue(data.get("addExpense"), Expense.class);
+    }
+
+    // Delete an expense via GraphQL mutation
+    public Expense deleteExpense(Long expenseId) throws Exception {
+        String mutation = String.format(
+            "{\"query\":\"mutation MyMutation {\\n  deleteExpense(id: \\\"%d\\\") {\\n    category\\n    currency\\n    id\\n    user\\n    value\\n  }\\n}\",\"operationName\":\"MyMutation\"}",
+            expenseId
+        );
+
+        Map<String, Object> response = executeGraphQL(mutation);
+
+        // Extract the deleted Expense from the response
+        Map<String, Object> data = (Map<String, Object>) response.get("data");
+        return objectMapper.convertValue(data.get("deleteExpense"), Expense.class);
     }
 
     // Helper function to execute GraphQL query/mutation

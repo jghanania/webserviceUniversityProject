@@ -66,7 +66,7 @@
     curl -X POST http://localhost:8081/graphql -H "Content-Type: application/json" -d '{"query":"query MyQuery {\n  totalExpensesByCategory(user: 1) {\n    category\n    currency\n    totalValue\n  }\n}","operationName":"MyQuery"}'
 
 
-    curl -X POST http://localhost:8081/graphql -H "Content-Type: application/json" -d '{"query":"query MyQuery {\n  ExpenseById(id: \"2\") {\n    category\n    currency\n    id\n    user\n        value\n  }\n}\n\n","operationName":"MyQuery"}'
+    curl -X POST http://localhost:8081/graphql -H "Content-Type: application/json" -d '{"query":"query MyQuery {\n  expenseById(id: \"2\") {\n    category\n    currency\n    id\n    user\n        value\n  }\n}\n\n","operationName":"MyQuery"}'
 
 
     curl -X POST http://localhost:8081/graphql -H "Content-Type: application/json" -d '{"query":"query MyQuery {\n  expensesFromCategories(categories: \"FOOD\", user: 1) {\n    category\n    c    urrency\n    id\n    user\n    value\n  }\n}","operationName":"MyQuery"}'

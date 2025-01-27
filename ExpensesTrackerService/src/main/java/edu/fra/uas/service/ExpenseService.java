@@ -56,6 +56,24 @@ public class ExpenseService {
     }
 
     /**
+     * Retrieves all expenses of a user stored in the repository.
+     * 
+     * @param user the id of the user
+     * @return An iterable collection of all expenses.
+     */
+    public Iterable<Expense> getAllExpensesFromUser(int user) {
+        log.debug("getExpensesFromUser: user: {}", user);
+
+        List<Expense> filteredExpenses = new ArrayList<>();
+        for (Expense expense : expenseRepository.values()) {
+            if (expense.getUser() == user) {
+                filteredExpenses.add(expense);
+            }
+        }
+        return filteredExpenses;
+    }
+
+    /**
      * Retrieves an expense by its ID.
      * 
      * @param id The ID of the expense to retrieve.
