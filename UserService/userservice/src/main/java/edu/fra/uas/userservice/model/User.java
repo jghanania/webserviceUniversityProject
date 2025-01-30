@@ -1,6 +1,5 @@
 package edu.fra.uas.userservice.model;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,14 +12,14 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private Long id;
 
     private String email;
-    private String name; 
-
+    private String name;
 
     //Konstruktoren
-    public User() {}
+    public User() {
+    }
 
     public User(String name, String email) {
         this.name = name;
@@ -29,11 +28,11 @@ public class User {
 
     //Getter und Setter
     public Long getId() {
-        return id; 
+        return id;
     }
 
     public void setId(Long id) {
-        this.id =id;
+        this.id = id;
     }
 
     public String getName() {

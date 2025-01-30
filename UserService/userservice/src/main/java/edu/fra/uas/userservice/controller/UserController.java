@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.fra.uas.userservice.model.User;
 import edu.fra.uas.userservice.service.UserService;
 
-
 // Controller für die Verwaltung der User
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
-/**
+
+    /**
      * Konstruktor für den UserController.
      *
      * @param userService Service für Benutzeroperationen

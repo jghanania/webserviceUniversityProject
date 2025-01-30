@@ -36,12 +36,11 @@ public class UserService {
 
     // Löschen User Id
     public void deletUser(Long id) {
-        if(userRepository.existsById(id)){
+        if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
-        }else{
-            throw new IllegalArgumentException("User mit der ID" +id + "not found.");
+        } else {
+            throw new IllegalArgumentException("User mit der ID" + id + "not found.");
         }
     }
 
 }
-
