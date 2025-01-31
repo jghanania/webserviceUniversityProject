@@ -14,16 +14,23 @@ public class UserserviceApplication {
         SpringApplication.run(UserserviceApplication.class, args);
     }
 
-    // CommandLineRunner für initiale Benutzerdaten
+    /**
+     * CommandLineRunner runs after the application starts.
+     * It initializes the database with some default users.
+     * 
+     * @param userService The service responsible for user operations.
+     * @return A lambda function that creates initial users in the database.
+    */
     @Bean
     public CommandLineRunner initData(UserService userService) {
         return args -> {
-            // Beispielbenutzer hinzufügen
+            // Creates initial users in the database
             userService.createUser("Jean", "Jean@example.com");
             userService.createUser("Emre", "Emre@example.com");
             userService.createUser("Daniel", "Daniel@example.com");
             userService.createUser("Lehmann", "Lehmann@example.com");
 
+            // Logging information to confirm initialization
             System.out.println("Initial users created in the database!");
         };
     }
