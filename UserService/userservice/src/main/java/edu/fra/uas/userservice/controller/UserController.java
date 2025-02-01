@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.fra.uas.userservice.model.User;
 import edu.fra.uas.userservice.service.UserService;
 
-// Controller für die Verwaltung der User
+/**
+ * Controller for user management.
+ */
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -22,35 +24,55 @@ public class UserController {
     private final UserService userService;
 
     /**
-     * Konstruktor für den UserController.
+     * Constructor for UserController.
      *
-     * @param userService Service für Benutzeroperationen
+     * @param userService Service for user operations.
      */
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    // Nutzer erstellen im JSON-Format, return erstellt den User
+    /**
+     * Creates a new user in JSON format.
+     *
+     * @param user The user to create.
+     * @return The created user.
+     */
     @PostMapping
     public User createUser(@RequestBody User user) {
         return userService.createUser(user.getName(), user.getEmail());
     }
 
-    // User nach ID abrufen
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param id The ID of the user.
+     * @return The user with the matching ID.
+     */
     @GetMapping("/{id}")
     public User getUser(@PathVariable Long id) {
         return userService.getUser(id);
     }
 
-    // User Liste abrufen
+    /**
+     * Retrieves a list of all users.
+     *
+     * @return A list of all users.
+     */
     @GetMapping
     public List<User> listUsers() {
         return userService.listUsers();
     }
 
+    /**
+     * Deletes a user by their ID.
+     *
+     * @param id The ID of the user to delete.
+     * @return A response indicating success (HTTP 204 No Content).
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deletUser(id); // Implementiere die Löschlogik im Service
-        return ResponseEntity.noContent().build(); // Rückgabe eines Status 204
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build(); // Returns HTTP 204 No Content
     }
 }
