@@ -17,7 +17,7 @@ public class User {
     private String email;
     private String name;
 
-    //Konstruktoren
+    //Constructor
     public User() {
     }
 
@@ -26,7 +26,7 @@ public class User {
         this.email = email;
     }
 
-    //Getter und Setter
+    //Getter and Setter
     public Long getId() {
         return id;
     }
