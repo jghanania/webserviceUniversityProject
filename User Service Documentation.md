@@ -4,10 +4,15 @@
 Ein einfacher RESTful UserService, der CRUD-Operationen für Benutzerdaten bereitstellt.
 
 ## Features
-- **Benutzer erstellen** (`POST /users`)
-- **Benutzer abrufen** (`GET /users/{id}`)
-- **Benutzer abrufen** (`DELETE /users/{id}`)
-- **Alle Benutzer abrufen** (`GET /users`)
+- **User erstellen** (`POST /users`)
+   POST http://localhost:8082/users Body: raw + JSON
+- **User abrufen** (`GET /users/{id}`)
+  GET http://localhost:8082/users/1
+- **User löschen** (`DELETE /users/{id}`)
+DELETE http://localhost:8082/users/2
+- **Liste abrufen** (`GET /users`)
+GET http://localhost:8082/users 
+
 
 ## Technologien
 - Spring Boot 3.4.2
