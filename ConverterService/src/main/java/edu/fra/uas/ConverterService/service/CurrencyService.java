@@ -13,6 +13,10 @@ import java.util.stream.Collectors;
  * Unter anderem werden alle unterstützten Währungen gelistet 
  * und eine Funktion zum Umrechnen von einer Ausgangswährung in eine Zielwährung. 
  */
+//apikeys: 3a00ed58c0429e54c480e5cc4ee2d15a
+//apikeys: 447f1d385a8365162bdf13d4c49d8f64
+//apikeys: a2c3a729f8948fd37d82edf502199254
+
 @Service
 public class CurrencyService {
     private String apiKey = "3a00ed58c0429e54c480e5cc4ee2d15a";
