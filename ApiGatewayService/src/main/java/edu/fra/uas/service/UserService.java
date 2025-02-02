@@ -2,8 +2,12 @@ package edu.fra.uas.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import edu.fra.uas.model.User;
 
@@ -38,9 +42,20 @@ public class UserService {
      * @return The user with the given ID.
      */
     public User getUserById(Long userId) {
-        // Build the URL for the user by ID
         String url = String.format("%s/%d", userServiceUrl, userId);
-        return restTemplate.getForObject(url, User.class);
+        try {
+            return restTemplate.getForObject(url, User.class);
+        } catch (HttpClientErrorException.NotFound e) {
+            // If user is not found, return null so the controller can handle it
+            return null;
+        } catch (HttpServerErrorException e) {
+            // If the user service returns a 500 error, log and return null
+            System.err.println("User service returned 500 error for user ID: " + userId);
+            return null;
+        } catch (HttpClientErrorException e) {
+            // Handle other 4xx errors
+            throw new RuntimeException("Client error while fetching user: " + e.getMessage(), e);
+        }
     }
 
     /**
@@ -59,19 +74,32 @@ public class UserService {
      *
      * @param userId The ID of the user to delete.
      */
-    public void deleteUser(Long userId) {
-        // Build the URL for the user by ID
+    public boolean deleteUser(Long userId) {
         String url = String.format("%s/%d", userServiceUrl, userId);
-        // Send a DELETE request to the external user service
-        restTemplate.delete(url);
+        try {
+            restTemplate.delete(url);
+            return true; // User deleted successfully
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                return false; // User not found
+            }
+            throw e; // Re-throw other client errors
+        } catch (HttpServerErrorException e) {
+            // Log the error and return false for any 5xx error
+            System.err.println("Error deleting user: " + e.getMessage());
+            return false; // Assume user not found if the service fails
+        }
     }
 
     public void validateUserExists(Long userId) {
         try {
             // Call UserService to check if the user exists
-            getUserById(userId);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("User with ID " + userId + " does not exist.");
+            User user = getUserById(userId);
+            if (user == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with ID " + userId + " does not exist.");
+            }
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with ID " + userId + " does not exist.");
         }
     }
 }
