@@ -47,6 +47,7 @@ Diese Klasse enthält die Logik zur Kommunikation mit der **CurrencyLayer API** 
 ### 1. Voraussetzungen
 - **Java 17+** installiert
 - **Maven** installiert
+- Api-Gateway muss zuerst ausgeführt werden
 
 ### 2. Projekt ausführen
 1. Repository klonen:
