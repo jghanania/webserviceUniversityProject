@@ -60,9 +60,16 @@ public class ConverterService {
      * @return The list of modified expenses with the updated values and currencies.
      */
     public List<Expense> convertExpenses(List<Expense> expenses, String targetCurrency) {
-        // Map over the list of expenses and convert each one
         return expenses.stream()
-                .map(expense -> convert(expense, targetCurrency))
+                .map(expense -> {
+                    try {
+                        // Introduce delay between requests
+                        Thread.sleep(1000); // 1 sec delay 
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt(); // Handle the exception properly
+                    }
+                    return convert(expense, targetCurrency);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -74,11 +81,19 @@ public class ConverterService {
      * @return The list of modified category totals with the updated values and currencies.
      */
     public List<CategoryTotal> convertCategoryTotals(List<CategoryTotal> categoryTotals, String targetCurrency) {
-        // Convert all CategoryTotal objects
+        // Convert all CategoryTotal objects with delay
         List<CategoryTotal> converted = categoryTotals.stream()
-                .map(categoryTotal -> convertCategoryTotal(categoryTotal, targetCurrency))
+                .map(categoryTotal -> {
+                    try {
+                        // Introduce delay between requests
+                        Thread.sleep(1000); // 1 sec delay 
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt(); // Handle the exception properly
+                    }
+                    return convertCategoryTotal(categoryTotal, targetCurrency);
+                })
                 .collect(Collectors.toList());
-
+    
         // Merge category totals with the same category and currency
         return mergedCategoryTotals(converted);
     }
@@ -100,7 +115,7 @@ public class ConverterService {
         }
 
         // Build the REST request URL
-        String url = String.format("%s?fromCurrency=%s&toCurrency=%s&amount=%f",
+        String url = String.format("%s?fromCurrency=%s&toCurrency=%s&amount=%f", 
                 converterServiceUrl, currentCurrency, targetCurrency, value);
 
         // Send the REST request and get the converted amount as a response
