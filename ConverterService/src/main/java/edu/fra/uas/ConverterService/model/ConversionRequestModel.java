@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Min;
 
 /**
- * Wird als Datenmodell verwendet um valide Eingaben sicherzustellen.
- * Die Constraints werden aus den Bibliotheken jakarta.validation.constraints gezogen.
+ * Used as a data model to ensure valid inputs.
+ * The constraints are taken from the jakarta.validation.constraints libraries.
  */
 public class ConversionRequestModel {
     @NotNull(message = "Die Ausgangswährung darf nicht null sein")
