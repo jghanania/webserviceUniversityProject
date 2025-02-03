@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ExpenseService {
@@ -34,6 +35,14 @@ public class ExpenseService {
         );
 
         Map<String, Object> response = executeGraphQL(query);
+
+        if (response.containsKey("errors")) {
+            List<Map<String, Object>> errors = (List<Map<String, Object>>) response.get("errors");
+            String errorMessage = errors.stream()
+                                        .map(error -> (String) error.get("message"))
+                                        .collect(Collectors.joining(", "));
+            throw new RuntimeException("GraphQL error: " + errorMessage);
+        }
 
         // Extract expenseById from the response
         Map<String, Object> data = (Map<String, Object>) response.get("data");

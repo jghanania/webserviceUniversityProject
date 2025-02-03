@@ -11,14 +11,14 @@ public class ConverterController {
 
     private final CurrencyService currencyService;
 
-    // Konstruktor für Dependency Injection
+    // Constructor for Dependency Injection
     public ConverterController(CurrencyService currencyService) {
         this.currencyService = currencyService;
     }
 
     /**
-     * Endpunkt zum Abrufen aller unterstützten Währungen.
-     * @return Map mit Währungscodes und deren Namen
+     * Endpoint to retrieve all supported currencies.
+     * @return Map with currency codes and their names
      */
     @GetMapping("/supported-currencies")
     public Map<String, String> getSupportedCurrencies() {
@@ -26,11 +26,11 @@ public class ConverterController {
     }
 
     /**
-     * Endpunkt: Betrag zwischen zwei Währungen umrechnen.
-     * @param from Die Quellwährung (z. B. "USD")
-     * @param to Die Zielwährung (z. B. "EUR")
-     * @param amount Der Betrag in der Quellwährung
-     * @return Der umgerechnete Betrag in der Zielwährung
+     * Endpoint: Convert an amount between two currencies.
+     * @param from The source currency (e.g., "USD")
+     * @param to The target currency (e.g., "EUR")
+     * @param amount The amount in the source currency
+     * @return The converted amount in the target currency
      */
     @GetMapping("/convert")
     public double convertCurrency(
@@ -40,8 +40,12 @@ public class ConverterController {
         return currencyService.convertCurrency(fromCurrency, toCurrency, amount);
     }
 
+
     /**
-     * Endpunkt: Multiple Conversion
+     * Endpoint: Convert to multiple currencies.
+     * @param fromCurrency The source currency
+     * @param amount The amount in the source currency
+     * @return A map with target currencies and their converted values
      */
     @GetMapping("/convertToMultipleCurrencies")
     public Map<String, Double> convertToMultipleCurrencies(
