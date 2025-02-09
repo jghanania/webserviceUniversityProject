@@ -44,3 +44,14 @@ type Mutation {
   ): Expense!
   deleteExpense(id: ID!): Expense
 }
+
+Expense
+  updateExpense(
+    user: Int!
+    id: ID!
+    category: String
+    value: Float!
+    currency: String!
+  ): Expense!
+}
+
