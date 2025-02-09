@@ -107,7 +107,11 @@ public class ExpensesController {
             return expenseService.getAllExpensesFromUser(user);
         }
         return expenseService.getAllExpenses();
-    }
+    } 
+    /**
+     * GraphQL Mutation to update an expense
+     *    Optional: Checks if the user is authorized to update this expense
+     Additional logic can be added here to ensure that the user is only able to update their own expenses. */ 
     @MutationMapping
     public Expense updateExpense(@Argument int user, @Argument Long id, @Argument String category, @Argument double value, @Argument String currency) {
         log.debug("updateExpense() is called with user: {}, id: {}, category: {}, value: {}, currency: {}", user, id, category, value, currency);
