@@ -108,6 +108,18 @@ public class ExpensesController {
         }
         return expenseService.getAllExpenses();
     }
+    @MutationMapping
+    public Expense updateExpense(@Argument int user, @Argument Long id, @Argument String category, @Argument double value, @Argument String currency) {
+        log.debug("updateExpense() is called with user: {}, id: {}, category: {}, value: {}, currency: {}", user, id, category, value, currency);
+        Expense expense = new Expense();
+        expense.setId(id);
+        expense.setUser(user);
+        expense.setCategory(category);
+        expense.setValue(value);
+        expense.setCurrency(currency);
+        return expenseService.updateExpense(expense);
+    }
+
 
     /**
      * Handles the "deleteExpense" GraphQL mutation.
