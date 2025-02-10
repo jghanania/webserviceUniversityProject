@@ -7,8 +7,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class represents an expense entry in the system.
- * It contains information about the user, category, value, and currency of an expense.
- * Implements Serializable to allow it to be serialized if needed for communication or persistence.
+ * It contains information about the user, category, value, and currency of an
+ * expense.
+ * Implements Serializable to allow it to be serialized if needed for
+ * communication or persistence.
  */
 public class Expense implements Serializable {
 
@@ -17,7 +19,7 @@ public class Expense implements Serializable {
     private long id;           // Unique identifier for the expense
     private long user;         // User associated with the expense
     private String category;   // Category of the expense (e.g., "Food", "Entertainment")
-    private double value;        // Value of the expense (in the specified currency)
+    private double value;      // Value of the expense (in the specified currency)
     private String currency;   // Currency of the expense (e.g., "USD", "EUR")
 
     // Default constructor
@@ -27,8 +29,8 @@ public class Expense implements Serializable {
 
     // Constructor with all fields
     public Expense(long id, long user, String category, double value, String currency) {
-        log.debug("Expense created with values - id: " + id + ", user: " + user + ", category: " + category + 
-                  ", value: " + value + ", currency: " + currency);
+        log.debug("Expense created with values - id: " + id + ", user: " + user + ", category: " + category +
+                ", value: " + value + ", currency: " + currency);
         this.id = id;
         this.user = user;
         this.category = category;
@@ -77,27 +79,28 @@ public class Expense implements Serializable {
         this.currency = currency;
     }
 
-    // Override equals method to compares two Expense objects. Returns true if all fields are equal.
+    // Override equals method to compares two Expense objects. Returns true if all
+    // fields are equal.
     @Override
     public boolean equals(Object object) {
-        if (object == null) 
+        if (object == null)
             return false;
-        if (object == this) 
+        if (object == this)
             return true;
-        if (this.getClass() != object.getClass()) 
+        if (this.getClass() != object.getClass())
             return false;
         Expense expense = (Expense) object;
         return this.id == expense.id &&
-               this.user == expense.user &&
-               (this.category == null ? expense.category == null : this.category.equals(expense.category)) &&
-               this.value == expense.value &&
-               (this.currency == null ? expense.currency == null : this.currency.equals(expense.currency));
+                this.user == expense.user &&
+                (this.category == null ? expense.category == null : this.category.equals(expense.category)) &&
+                this.value == expense.value &&
+                (this.currency == null ? expense.currency == null : this.currency.equals(expense.currency));
     }
-
 
     // Override toString method
     @Override
     public String toString() {
-        return "Expense [id=" + id + ", user=" + user + ", category=" + category + ", value=" + value + ", currency=" + currency + "]";
+        return "Expense [id=" + id + ", user=" + user + ", category=" + category + ", value=" + value + ", currency="
+                + currency + "]";
     }
 }
