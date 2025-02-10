@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 /**
-*This code is the main entry point for a Spring Boot application that starts a web service, likely for tracking expenses.
-*/
+ * This code is the main entry point for expenses tracking service
+ */
 public class ExpensesTrackerServiceApplication {
 
 	public static void main(String[] args) {
