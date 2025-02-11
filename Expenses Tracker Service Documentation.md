@@ -2,9 +2,7 @@
 ## API Type: GraphQL
 ### Planned functions
 #### Add expense
-####  1. Add Expense (Mutation)
-•	Typ: Mutation
-•	Felder:
+####  1. Add Expense 
 *	id (long): Eine eindeutige ID für die Ausgabe.
 *	value (int): Der Betrag der Ausgabe (z. B. 100).
 *	currency (string): Die Währung, in der der Betrag angegeben ist (z. B. EUR).
@@ -17,9 +15,8 @@
 *	user: Die ID des Benutzers.
 
 
- #### 2.List Expenses (Query)
-•	Typ: Query
-•	Felder:
+ #### 2.List Expenses
+
 *	id (long): Eine eindeutige ID der Ausgabe.
 *	value (int): Der Betrag der Ausgabe.
 *	currency (string): Die Währung, in der die Ausgabe angegeben ist.
@@ -29,8 +26,6 @@
 *	user (int): Die ID des Benutzers, dessen Ausgaben angezeigt werden sollen.
 
 #### 3. Delete Expense
-•	Typ: Mutation
-•	Felder:
 *	id (long): Eine eindeutige ID der Ausgabe.
 *	value (int): Der Betrag der Ausgabe.
 *	currency (string): Die Währung, in der die Ausgabe angegeben ist.
@@ -41,8 +36,7 @@
 
 
 #### List Expenses Per Category
-* •	Typ: Query
-•	Felder:
+
 	category (string): Die Kategorie der Ausgabe (z. B. "Lebensmittel", "Transport").
 *	currency (string): Die Währung, in der die Ausgaben angegeben sind.
 *	totalValue (int): Der Gesamtbetrag der Ausgaben in dieser Kategorie.
@@ -51,8 +45,7 @@
 
 
 #### List Expenses From Categories
-•	Typ: Query (mit HTTP-Post-Anfrage)
-•	Felder:
+
 *	id (long): Eine eindeutige ID der Ausgabe.
 *	value (int): Der Betrag der Ausgabe.
 *	currency (string): Die Währung, in der die Ausgabe angegeben ist.
