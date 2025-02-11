@@ -2,62 +2,66 @@
 ## API Type: GraphQL
 ### Planned functions
 #### Add expense
-* Type: Mutation
-* Fields:
-  * id (long)
-  * value (int)
-  * currency (string)
-  * category (string)
-  * user (int)
-* Arguments:
-  * value (int)
-  * currency (string)
-  * category (string)
-  * user (int)
+####  1. Add Expense (Mutation)
+•	Typ: Mutation
+•	Felder:
+*	id (long): Eine eindeutige ID für die Ausgabe.
+*	value (int): Der Betrag der Ausgabe (z. B. 100).
+*	currency (string): Die Währung, in der der Betrag angegeben ist (z. B. EUR).
+*	category (string): Die Kategorie der Ausgabe (z. B. "Lebensmittel", "Transport").
+*	user (int): Die ID des Benutzers, der die Ausgabe getätigt hat.
+•	Argumente:
+*	value: Der Betrag der Ausgabe.
+*	currency: Die Währung, in der die Ausgabe getätigt wurde.
+*	category: Die Kategorie der Ausgabe.
+*	user: Die ID des Benutzers.
 
-#### List Expenses
-* Type: Query
-* Fields:
-  * id (long)
-  * value (int)
-  * currency (string)
-  * category (string)
-  * user (int)
-* Arguments:
-  * user (int)
 
-#### Delete Expense
-* Type: Mutation
-* Fields:
-  * id (long)
-  * value (int)
-  * currency (string)
-  * category (string)
-  * user (int)
-* Arguments:
-  * IDs (json list of ints)
+ #### 2.List Expenses (Query)
+•	Typ: Query
+•	Felder:
+*	id (long): Eine eindeutige ID der Ausgabe.
+*	value (int): Der Betrag der Ausgabe.
+*	currency (string): Die Währung, in der die Ausgabe angegeben ist.
+*	category (string): Die Kategorie der Ausgabe.
+*	user (int): Die ID des Benutzers.
+•	Argumente:
+*	user (int): Die ID des Benutzers, dessen Ausgaben angezeigt werden sollen.
+
+#### 3. Delete Expense
+•	Typ: Mutation
+•	Felder:
+*	id (long): Eine eindeutige ID der Ausgabe.
+*	value (int): Der Betrag der Ausgabe.
+*	currency (string): Die Währung, in der die Ausgabe angegeben ist.
+*	category (string): Die Kategorie der Ausgabe.
+*	user (int): Die ID des Benutzers.
+•	Argumente:
+*	IDs: Eine Liste von IDs, die gelöscht werden sollen (im JSON-Format).
+
 
 #### List Expenses Per Category
-* Type: Query
-* Fields:
-  * category (string)
-  * currency (string)
-  * totalValue (int)
-* Arguments: 
-  * user (long)
+* •	Typ: Query
+•	Felder:
+	category (string): Die Kategorie der Ausgabe (z. B. "Lebensmittel", "Transport").
+*	currency (string): Die Währung, in der die Ausgaben angegeben sind.
+*	totalValue (int): Der Gesamtbetrag der Ausgaben in dieser Kategorie.
+•	Argumente:
+*	user (long): Die ID des Benutzers, dessen Ausgaben nach Kategorien gruppiert angezeigt werden sollen.
+
 
 #### List Expenses From Categories
-* Type: Query
-* http request: Post
-* Fields:
-  * id (long)
-  * value (int)
-  * currency (string)
-  * category (string)
-  * user (int)
-* Arguments:
-  * Category list (json list)
-  * user (int)
+•	Typ: Query (mit HTTP-Post-Anfrage)
+•	Felder:
+*	id (long): Eine eindeutige ID der Ausgabe.
+*	value (int): Der Betrag der Ausgabe.
+*	currency (string): Die Währung, in der die Ausgabe angegeben ist.
+*	category (string): Die Kategorie der Ausgabe.
+*	user (int): Die ID des Benutzers.
+•	Argumente:
+*	Category list: Eine Liste von Kategorien im JSON-Format, für die Ausgaben abgefragt werden sollen.
+*	user: Die ID des Benutzers, dessen Ausgaben angezeigt werden sollen.
+
 
 
 
