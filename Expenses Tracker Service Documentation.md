@@ -8,7 +8,6 @@
 *	currency (string): Die Währung, in der der Betrag angegeben ist (z. B. EUR).
 *	category (string): Die Kategorie der Ausgabe (z. B. "Lebensmittel", "Transport").
 *	user (int): Die ID des Benutzers, der die Ausgabe getätigt hat.
-•	Argumente:
 *	value: Der Betrag der Ausgabe.
 *	currency: Die Währung, in der die Ausgabe getätigt wurde.
 *	category: Die Kategorie der Ausgabe.
@@ -22,7 +21,6 @@
 *	currency (string): Die Währung, in der die Ausgabe angegeben ist.
 *	category (string): Die Kategorie der Ausgabe.
 *	user (int): Die ID des Benutzers.
-•	Argumente:
 *	user (int): Die ID des Benutzers, dessen Ausgaben angezeigt werden sollen.
 
 #### 3. Delete Expense
@@ -31,16 +29,14 @@
 *	currency (string): Die Währung, in der die Ausgabe angegeben ist.
 *	category (string): Die Kategorie der Ausgabe.
 *	user (int): Die ID des Benutzers.
-•	Argumente:
 *	IDs: Eine Liste von IDs, die gelöscht werden sollen (im JSON-Format).
 
 
 #### List Expenses Per Category
 
-	category (string): Die Kategorie der Ausgabe (z. B. "Lebensmittel", "Transport").
+	category (string): Die Kategorie der Ausgabe .
 *	currency (string): Die Währung, in der die Ausgaben angegeben sind.
 *	totalValue (int): Der Gesamtbetrag der Ausgaben in dieser Kategorie.
-•	Argumente:
 *	user (long): Die ID des Benutzers, dessen Ausgaben nach Kategorien gruppiert angezeigt werden sollen.
 
 
@@ -51,7 +47,6 @@
 *	currency (string): Die Währung, in der die Ausgabe angegeben ist.
 *	category (string): Die Kategorie der Ausgabe.
 *	user (int): Die ID des Benutzers.
-•	Argumente:
 *	Category list: Eine Liste von Kategorien im JSON-Format, für die Ausgaben abgefragt werden sollen.
 *	user: Die ID des Benutzers, dessen Ausgaben angezeigt werden sollen.
 
