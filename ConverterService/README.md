@@ -1,7 +1,5 @@
 # ConverterService Dokumentation
 
-**Speicherort:** Diese Datei sollte im Ordner `ConverterService/README.md` gespeichert werden, damit die Dokumentation direkt mit dem Service verknüpft ist.
-
 ## Übersicht
 Der ConverterService ist eine Spring Boot-Anwendung, die als Microservice für die Umrechnung von Währungen fungiert. Er ruft aktuelle Wechselkurse von der CurrencyLayer API ab und ermöglicht Echtzeit-Umrechnungen zwischen verschiedenen Währungen, die alle 60 Minuten aktualisiert werden. Dieser Service ist Teil eines größeren Systems und kommuniziert mit einem API-Gateway, das als zentraler Zugriffspunkt für alle Clients dient.
 
@@ -24,24 +22,19 @@ Diese Klasse enthält die Logik zur Kommunikation mit der **CurrencyLayer API** 
 
 **Hauptmethoden:**
 - `getSupportedCurrencies()`  
-  ➡ Fragt die API `https://api.currencylayer.com/list` ab und gibt die Liste aller Währungen zurück.
+  Fragt die API `https://api.currencylayer.com/list` ab und gibt die Liste aller Währungen zurück.
 
 - `convertCurrency(String from, String to, double amount)`  
-  ➡ Fragt die API `https://api.currencylayer.com/convert` mit den angegebenen Währungen und Betrag ab und gibt den umgerechneten Betrag zurück.
+  Fragt die API `https://api.currencylayer.com/convert` mit den angegebenen Währungen und Betrag ab und gibt den umgerechneten Betrag zurück.
 
 - `convertToMultiple(String fromCurrency, Double amount)`  
-  ➡ Fragt die API `https://api.currencylayer.com/live` ab, um den angegebenen Betrag in mehrere Währungen gleichzeitig umzurechnen.
+  Fragt die API `https://api.currencylayer.com/live` ab, um den angegebenen Betrag in mehrere Währungen gleichzeitig umzurechnen.
 
 ## Technologie-Stack
 - **Spring Boot** – Framework für die REST-API
 - **Java 17** – Programmiersprache
 - **RestTemplate** – HTTP-Anfragen an die externe API
 - **CurrencyLayer API** – Externe API für Wechselkurse
-
-## Verbesserungsmöglichkeiten
-1. **API-Schlüssel aus dem Code entfernen** und in `application.properties` auslagern.
-2. **Fehlertoleranz erhöhen**, indem Fehler von der API abgefangen und entsprechende Meldungen zurückgegeben werden.
-3. **Caching einführen**, um Performance zu verbessern und API-Anfragen zu reduzieren.
 
 ## Implementierte User Stories
 
@@ -59,6 +52,11 @@ Diese Klasse enthält die Logik zur Kommunikation mit der **CurrencyLayer API** 
 | 5 | Unterstützung für historische Wechselkurse | *Als Nutzer* möchte ich Wechselkurse zu einem bestimmten Datum abrufen können, *damit* ich historische Daten für meine Finanzplanung nutzen kann. |
 | 6 | API-Key in der Konfigurationsdatei speichern | *Als Entwickler* möchte ich den API-Schlüssel nicht im Code speichern, *damit* keine Sicherheitsrisiken entstehen. |
 | 7 | Unterstützung für Kryptowährungen hinzufügen | *Als Nutzer* möchte ich auch Kryptowährungen wie Bitcoin oder Ethereum umrechnen können, *damit* ich die aktuellen Wechselkurse mit Fiat-Währungen vergleichen kann. |
+
+## Verbesserungsmöglichkeiten
+1. **API-Schlüssel aus dem Code entfernen** und in `application.properties` auslagern.
+2. **Fehlertoleranz erhöhen**, indem Fehler von der API abgefangen und entsprechende Meldungen zurückgegeben werden.
+3. **Caching einführen**, um Performance zu verbessern und API-Anfragen zu reduzieren.
 
 
 ## Setup & Installation
