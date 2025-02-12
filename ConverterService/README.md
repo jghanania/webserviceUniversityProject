@@ -43,6 +43,24 @@ Diese Klasse enthält die Logik zur Kommunikation mit der **CurrencyLayer API** 
 2. **Fehlertoleranz erhöhen**, indem Fehler von der API abgefangen und entsprechende Meldungen zurückgegeben werden.
 3. **Caching einführen**, um Performance zu verbessern und API-Anfragen zu reduzieren.
 
+## Implementierte User Stories
+
+| **ID** | **User Story** | **Beschreibung** |
+|-------|----------------------------------|--------------------------------------------------------------|
+| 1 | Währungsumrechnung für einen bestimmten Betrag | *Als Nutzer* möchte ich einen Betrag in einer bestimmten Währung in eine andere Währung umrechnen können, *damit* ich den aktuellen Wert in meiner Zielwährung kenne. |
+| 2 | Liste der unterstützten Währungen abrufen | *Als Nutzer* möchte ich eine Liste aller unterstützten Währungen abrufen, *damit* ich weiß, welche Währungen ich umrechnen kann. |
+| 3 | Mehrere Währungen auf einmal umrechnen | *Als Nutzer* möchte ich einen Betrag in mehrere Währungen gleichzeitig umrechnen, *damit* ich die aktuellen Wechselkurse für verschiedene Währungen vergleichen kann. |
+
+## Noch nicht implementierte User Stories
+
+| **ID** | **User Story** | **Beschreibung** |
+|-------|----------------------------------|--------------------------------------------------------------|
+| 4 | Caching für bessere Performance einführen | *Als Nutzer* möchte ich, dass Währungsumrechnungen schneller erfolgen, *damit* ich nicht unnötig lange auf eine Antwort warten muss. |
+| 5 | Unterstützung für historische Wechselkurse | *Als Nutzer* möchte ich Wechselkurse zu einem bestimmten Datum abrufen können, *damit* ich historische Daten für meine Finanzplanung nutzen kann. |
+| 6 | API-Key in der Konfigurationsdatei speichern | *Als Entwickler* möchte ich den API-Schlüssel nicht im Code speichern, *damit* keine Sicherheitsrisiken entstehen. |
+| 7 | Unterstützung für Kryptowährungen hinzufügen | *Als Nutzer* möchte ich auch Kryptowährungen wie Bitcoin oder Ethereum umrechnen können, *damit* ich die aktuellen Wechselkurse mit Fiat-Währungen vergleichen kann. |
+
+
 ## Setup & Installation
 ### 1. Voraussetzungen
 - **Java 17+** installiert
