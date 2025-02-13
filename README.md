@@ -179,21 +179,21 @@ Ersetzen dazu in den unteren Beispielen `{userId}`, `{expenseId}`, `{category}` 
 
     Optional: Währungskonvertierung hinzufügen:
     ```sh
-    curl -X GET http://localhost:8080/api/users/{userId}/expenses/{expenseId}?currency={currency}" -H "Accept: application/json"
+    curl -X GET http://localhost:8080/api/users/{userId}/expenses/{expenseId}?currency={currency} -H "Accept: application/json"
     ```
 
 3. Neue Ausgabe hinzufügen
     ```sh
     curl -X POST http://localhost:8080/api/users/{userId}/expenses \
         -H "Content-Type: application/json" \
-        -d '{"amount": 100.0, "category": "Food", "description": "Dinner at restaurant"}'
+        -d '{"value": 100.0, "category": "FOOD", "currency": "EUR"}'
     ```
 
 4. Bestehende Ausgabe aktualisieren
     ```sh
     curl -X PUT http://localhost:8080/api/users/{userId}/expenses/{expenseId} \
         -H "Content-Type: application/json" \
-        -d '{"amount": 120.0, "category": "Food", "description": "Updated dinner expense"}'
+        -d '{"value": 120.0, "category": "FOOD", "currency": "USD"}'
     ```
 
 5. Ausgabe löschen
@@ -201,7 +201,7 @@ Ersetzen dazu in den unteren Beispielen `{userId}`, `{expenseId}`, `{category}` 
     curl -X DELETE http://localhost:8080/api/users/{userId}/expenses/{expenseId} -H "Accept: application/json"
     ```
 
-#### Zusammenfassun der Ausgaben nach Kategorien
+#### Zusammenfassung der Ausgaben nach Kategorien
 
 1.  Gesamtausgaben nach Kategorie abrufen
     ```sh
