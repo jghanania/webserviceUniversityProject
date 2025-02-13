@@ -23,7 +23,7 @@ Schnittstellen: REST
 - Der **Expense Tracker Service** bietet eine GraphQL-Schnittstelle zur Verwaltung von Ausgaben. Er ermöglicht das Abrufen, Erstellen, Aktualisieren und Löschen von Ausgaben für verschiedene Benutzer.  
 Port: 8081  
 Schnittstellen: GraphQL  
-[Link zur Dokumentation](Expense/README.md)
+[Link zur Dokumentation](ExpensesTrackerService/README.md)
 
 - Der **Converter Service** stellt eine API zur Währungsumrechnung zur Verfügung. Mit ihm können Benutzer Währungsbeträge zwischen verschiedenen Währungen konvertieren und sich über unterstützte Währungen informieren.  
 Port: 8082  
@@ -78,7 +78,7 @@ Durch **Swagger UI** bietet unsere Webanwendung eine interaktive und benutzerfre
    - Wählen Sie einen Endpunkt aus der Liste.  
    - Klicken Sie auf **"Try it out"** und geben Sie die erforderlichen Parameter ein.  
    - Führen Sie die Anfrage mit **"Execute"** aus.  
-   - Überprüfen Sie die Antwort im unteren Bereich der Swagger UI.  
+   - Überprüfen Sie die Antwort im unteren Bereich der Swagger UI.
 
 
 #### **API-Endpunkte & Funktionen**
@@ -97,7 +97,133 @@ Durch **Swagger UI** bietet unsere Webanwendung eine interaktive und benutzerfre
 | **GET**    | `/api/users/{userId}/categories/{category}` | Holt die Gesamtausgaben einer bestimmten Kategorie. |
 | **GET**    | `/api/users/{userId}/categories/sum` | Holt die Gesamtausgaben aller Kategorien für einen Nutzer. |
 
- 🚀  
+---
+
+### Zugriff über Postman
+
+#### Voraussetzungen
+- Installiere [Postman](https://www.postman.com/downloads/)
+- Stelle sicher, dass dein Webservice läuft
+
+#### Nutzung
+
+1. Öffne Postman und erstelle eine neue Anfrage.
+2. Wähle die HTTP-Methode (z.B. `GET`, `POST`).
+3. Gib die URL des Endpunkts ein, z.B. `http://localhost:8080/api/users`.
+4. Falls erforderlich, füge einen Request-Body im JSON-Format hinzu.
+5. Klicke auf "Send" und überprüfe die Antwort des Servers.
+
+#### API-Anfragen
+Die folgende Tabelle zeigt die möglichen API-Anfragen:
+
+| Methode  | Endpunkt                                      | Beschreibung                                 | Beispiel-Request-Body | Unterstützt `?currency=` |
+|----------|----------------------------------------------|---------------------------------------------|----------------------|------------------------|
+| `GET`    | `/api/users`                                | Alle Benutzer abrufen                      | -                    | Nein                   |
+| `GET`    | `/api/users/{userId}`                      | Einen Benutzer anhand der ID abrufen       | -                    | Nein                   |
+| `POST`   | `/api/users`                                | Einen neuen Benutzer erstellen             | `{ "name": "Max", "email": "max@example.com" }` | Nein                   |
+| `DELETE` | `/api/users/{userId}`                      | Einen Benutzer löschen                     | -                    | Nein                   |
+| `GET`    | `/api/users/{userId}/expenses`             | Alle Ausgaben eines Benutzers abrufen      | -                    | Ja                     |
+| `GET`    | `/api/users/{userId}/expenses/{expenseId}` | Eine bestimmte Ausgabe abrufen             | -                    | Ja                     |
+| `POST`   | `/api/users/{userId}/expenses`             | Eine neue Ausgabe hinzufügen               | `{ "category": "Food", "value": 50.0, "currency": "EUR" }` | Nein                   |
+| `PUT`    | `/api/users/{userId}/expenses/{expenseId}` | Eine bestehende Ausgabe aktualisieren      | `{ "category": "Transport", "value": 60.0, "currency": "USD" }` | Nein                   |
+| `DELETE` | `/api/users/{userId}/expenses/{expenseId}` | Eine Ausgabe löschen                       | -                    | Nein                   |
+| `GET`    | `/api/users/{userId}/categories/sum`       | Gesamtausgaben nach Kategorie abrufen      | -                    | Ja                     |
+| `GET`    | `/api/users/{userId}/categories/{category}`| Ausgaben für eine bestimmte Kategorie abrufen | -                | Ja                     |
+
+---
+### Zugriff über Konsole
+
+Sie können den Webservice mittels `cURL` in der Konsole nutzen. 
+Ersetzen dazu in den unteren Beispielen `{userId}`, `{expenseId}`, `{category}` und `{currency}` mit den jeweiligen tatsächlichen Werten.
+
+#### Verwaltung der Nutzer
+
+1. Alle Benutzer abrufen
+    ```sh
+    curl -X GET http://localhost:8080/api/users -H "Accept: application/json"
+    ```
+
+2. Benutzer nach ID abrufen
+    ```sh
+    curl -X GET http://localhost:8080/api/users/{userId} -H "Accept: application/json"
+    ```
+
+3. Neuen Benutzer erstellen
+    ```sh
+    curl -X POST http://localhost:8080/api/users \
+        -H "Content-Type: application/json" \
+        -d '{"name": "Max Mustermann", "email": "max@example.com"}'
+    ```
+
+4. Benutzer löschen
+    ```sh
+    curl -X DELETE http://localhost:8080/api/users/{userId} -H "Accept: application/json"
+    ```
+
+#### Verwaltung der Ausgaben
+
+1. Alle Ausgaben eines Benutzers abrufen
+    ```sh
+    curl -X GET http://localhost:8080/api/users/{userId}/expenses -H "Accept: application/json"
+    ```
+
+    Optional: Währungskonvertierung hinzufügen:
+    ```sh
+    curl -X GET "http://localhost:8080/api/users/{userId}/expenses?currency={currency}" -H "Accept: application/json"
+    ```
+
+2. Einzelne Ausgabe abrufen
+    ```sh
+    curl -X GET http://localhost:8080/api/users/{userId}/expenses/{expenseId} -H "Accept: application/json"
+    ```
+
+    Optional: Währungskonvertierung hinzufügen:
+    ```sh
+    curl -X GET http://localhost:8080/api/users/{userId}/expenses/{expenseId}?currency={currency}" -H "Accept: application/json"
+    ```
+
+3. Neue Ausgabe hinzufügen
+    ```sh
+    curl -X POST http://localhost:8080/api/users/{userId}/expenses \
+        -H "Content-Type: application/json" \
+        -d '{"amount": 100.0, "category": "Food", "description": "Dinner at restaurant"}'
+    ```
+
+4. Bestehende Ausgabe aktualisieren
+    ```sh
+    curl -X PUT http://localhost:8080/api/users/{userId}/expenses/{expenseId} \
+        -H "Content-Type: application/json" \
+        -d '{"amount": 120.0, "category": "Food", "description": "Updated dinner expense"}'
+    ```
+
+5. Ausgabe löschen
+    ```sh
+    curl -X DELETE http://localhost:8080/api/users/{userId}/expenses/{expenseId} -H "Accept: application/json"
+    ```
+
+#### Zusammenfassun der Ausgaben nach Kategorien
+
+1.  Gesamtausgaben nach Kategorie abrufen
+    ```sh
+    curl -X GET http://localhost:8080/api/users/{userId}/categories/sum -H "Accept: application/json"
+    ```
+
+    Optional: Währungskonvertierung hinzufügen:
+    ```sh
+    curl -X GET "http://localhost:8080/api/users/{userId}/categories/sum?currency={currency}" -H "Accept: application/json"
+    ```
+
+2.  Ausgaben einer bestimmten Kategorie abrufen
+    ```sh
+    curl -X GET http://localhost:8080/api/users/{userId}/categories/{category} -H "Accept: application/json"
+    ```
+
+    Optional: Währungskonvertierung hinzufügen:
+    ```sh
+    curl -X GET "http://localhost:8080/api/users/{userId}/categories/{category}?currency={currency}" -H "Accept: application/json"
+    ```
+
+
 
 
 ## Roadmap
