@@ -87,7 +87,12 @@ public class ApiGatewayController {
             @RequestParam(value = "currency", required = false) String currency) throws Exception {
 
         // Validate if the user exists
-        userService.validateUserExists(userId);
+        Boolean userExist = userService.validateUserExists(userId);
+
+        if (!userExist) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User does not exist"));
+        }
 
         log.debug("Fetching all expenses for user {}", userId);
 
@@ -115,7 +120,12 @@ public class ApiGatewayController {
             @RequestParam(value = "currency", required = false) String currency) throws Exception {
 
         // Validate if the user exists
-        userService.validateUserExists(userId);
+        Boolean userExist = userService.validateUserExists(userId);
+
+        if (!userExist) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User does not exist"));
+        }
 
         log.debug("Fetching expense with ID {} for user {}", expenseId, userId);
 
@@ -143,16 +153,21 @@ public class ApiGatewayController {
             @RequestBody ExpenseUpdateRequest expenseUpdate) throws Exception {
 
         // Validate if the user exists
-        userService.validateUserExists(userId);
+        Boolean userExist = userService.validateUserExists(userId);
+
+        if (!userExist) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User does not exist"));
+        }
 
         Expense expenseToUpdate = expenseService.getExpenseById(expenseId);
 
         if (expenseToUpdate == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Expense not found"); // Return 404 when not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Expense not found")); // Return 404 when not found
         }
 
         if (expenseToUpdate.getUser() != userId) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not the user who created this resource.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "You are not the user who created this resource."));
         }
 
         log.debug("Updating expense with ID {} for user {}", expenseId, userId);
@@ -179,7 +194,12 @@ public class ApiGatewayController {
             @RequestParam(value = "currency", required = false) String currency) throws Exception {
 
         // Validate if the user exists
-        userService.validateUserExists(userId);
+        Boolean userExist = userService.validateUserExists(userId);
+
+        if (!userExist) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User does not exist"));
+        }
 
         log.debug("Fetching total expenses by category for user {}", userId);
         // Call the ExpenseService to get total expenses by category
@@ -204,7 +224,12 @@ public class ApiGatewayController {
             @RequestParam(value = "currency", required = false) String currency) throws Exception {
 
         // Validate if the user exists
-        userService.validateUserExists(userId);
+        Boolean userExist = userService.validateUserExists(userId);
+
+        if (!userExist) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User does not exist"));
+        }
 
         log.debug("Fetching expenses for category {} for user {}", category, userId);
         // Call the ExpenseService to fetch expenses by category
@@ -227,7 +252,12 @@ public class ApiGatewayController {
             throws Exception {
 
         // Validate if the user exists
-        userService.validateUserExists(userId);
+        Boolean userExist = userService.validateUserExists(userId);
+
+        if (!userExist) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User does not exist"));
+        }
 
         log.debug("Adding new expense for user {}: {}", userId, expense);
 
@@ -258,7 +288,12 @@ public class ApiGatewayController {
             @PathVariable("expenseId") Long expenseId) throws Exception {
 
         // Validate if the user exists
-        userService.validateUserExists(userId);
+        Boolean userExist = userService.validateUserExists(userId);
+
+        if (!userExist) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User does not exist"));
+        }
 
         log.debug("Deleting expense with ID {} for user {}", expenseId, userId);
 

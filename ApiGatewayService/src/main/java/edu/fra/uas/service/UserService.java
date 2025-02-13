@@ -91,15 +91,16 @@ public class UserService {
         }
     }
 
-    public void validateUserExists(Long userId) {
+    public boolean validateUserExists(Long userId) {
         try {
             // Call UserService to check if the user exists
             User user = getUserById(userId);
             if (user == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with ID " + userId + " does not exist.");
+                return false;
             }
         } catch (ResponseStatusException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with ID " + userId + " does not exist.");
+            return false;
         }
+        return true;
     }
 }
