@@ -1,9 +1,6 @@
 # Documentation: Expenses Tracker Service
 ## API Type: GraphQL
 ### Planned functions
-# Documentation: Expenses Tracker Service
-## API Type: GraphQL
-### Planned functions
 ## 1. Add Expense (Mutation)
 
 | *Feld*    | *Typ*  | *Beschreibung*                                             |
