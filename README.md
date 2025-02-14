@@ -33,7 +33,7 @@ Schnittstellen: REST
 - Der **User Service** ermöglicht die Verwaltung von Benutzern über eine REST-API. Er unterstützt grundlegende Operationen wie das Erstellen, Abrufen, Auflisten und Löschen von Benutzern  
 Port: 8083  
 Schnittstellen: REST  
-[Link zur Dokumentation](UserService/README.md)
+[Link zur Dokumentation](UserService/userservice/README.md)
 
 
 ![Graph](AdditionalAssets/ProjektArchitekturPretty.png)
