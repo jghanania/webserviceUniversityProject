@@ -19,6 +19,7 @@ Er ermöglicht das Abrufen, Erstellen, Bearbeiten und Löschen von Benutzerdaten
 
 ## 3. User Stories
 
+
 | Als...  | möchte ich …                                      | damit/weil/denn … |
 |---------|-------------------------------------------------|-------------------|
 | **Nutzer** | eine Liste aller vorhandenen User abfragen | ich eine Übersicht der vorhandenen User habe. |
