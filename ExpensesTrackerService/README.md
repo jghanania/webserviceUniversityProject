@@ -107,6 +107,21 @@ Diese Funktion bietet eine Zusammenfassung der Ausgaben eines Nutzers, aufgeteil
 Mit dieser Funktion hat der Benutzer die Möglichkeit, eine Liste von Kategorien anzugeben, wie beispielsweise “Lebensmittel” oder “Transport”. Der Microservice liefert daraufhin alle Ausgaben, die in diese Kategorien fallen. Da eine Liste von Kategorien als Eingabeparameter übergeben wird, erfolgt die Anfrage über eine HTTP-POST-Anfrage. Diese Funktion erlaubt es, Ausgaben detailliert und gleichzeitig nach mehreren Kategorien abzufragen.
 
 
+### updateExpenses (Mutation)
+
+| **Feld**   | **Typ**  | **Beschreibung**                                    |
+|------------|---------|-----------------------------------------------------|
+| ID         | ID!     | Eine eindeutige ID für die Ausgabe.                 |
+| user       | Int!    | Die ID des Benutzers, der die Ausgabe tätigt.       |
+| value      | Int!    | Der Betrag der Ausgabe (z. B. 100).                 |
+| category   | String! | Die Kategorie der Ausgabe (z. B. "FOOD").           |
+| currency   | String! | Die Währung der Ausgabe (z. B. "EUR").              |
+
+Die Mutation `updateExpenses` ermöglicht es, eine vorhandene Ausgabe anhand ihrer eindeutigen ID zu aktualisieren. Der Benutzer kann Änderungen an **Betrag, Währung oder Kategorie** vornehmen.  
+Diese Funktion stellt sicher, dass bestehende Datensätze **nicht dupliziert**, sondern gezielt geändert werden.
+
+
+
 ## Test Möglichkeiten
 Der Service kann über die Website http://127.0.0.1:8081/graphiql?path=/graphql getestet werden oder in der Konsole mit zum Beispiel folgenden befehlen:
 - `curl -X POST http://localhost:8081/graphql -H "Content-Type: application/json" -d '{"query":"query MyQuery {\n  totalExpensesByCategory(user: 1) {\n    category\n    currency\n    totalValue\n  }\n}","operationName":"MyQuery"}'`
