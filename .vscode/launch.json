@@ -26,7 +26,8 @@
             "mainClass": "edu.fra.uas.ExpensesTrackerServiceApplication",
             "projectName": "ExpensesTrackerService",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote"
         },
         {
             "type": "java",
@@ -35,6 +36,17 @@
             "cwd": "${workspaceFolder}",
             "mainClass": "edu.fra.uas.ApiGatewayApplication",
             "projectName": "ApiGateway",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-UserserviceApplication<userservice>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "edu.fra.uas.userservice.UserserviceApplication",
+            "projectName": "userservice",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
