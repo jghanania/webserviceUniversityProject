@@ -58,7 +58,7 @@ public class ExpenseService {
         expenseId, userId, 
         expenseUpdate.getCategory() != null ? expenseUpdate.getCategory() : expenseToUpdate.getCategory(), 
         expenseUpdate.getCurrency() != null ? expenseUpdate.getCurrency() : expenseToUpdate.getCurrency(), 
-        expenseUpdate.getValue() != 0.0 ? expenseUpdate.getValue() : expenseToUpdate.getValue()
+        expenseUpdate.getValue() != null ? expenseUpdate.getValue() : expenseToUpdate.getValue()
     );
 
         Map<String, Object> response = executeGraphQL(mutation);

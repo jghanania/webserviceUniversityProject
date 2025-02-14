@@ -77,6 +77,7 @@ Durch **Swagger UI** bietet unsere Webanwendung eine interaktive und benutzerfre
 2. **API-Endpunkte testen**  
    - Wählen Sie einen Endpunkt aus der Liste.  
    - Klicken Sie auf **"Try it out"** und geben Sie die erforderlichen Parameter ein.  
+     - Bei Anfragen die Ausgaben oder Summen von Ausgaben zurück liefert gibt es einen optionalen Parameter "currency" um diese in einer bestimmten Währung zu konvertieren.
    - Führen Sie die Anfrage mit **"Execute"** aus.  
    - Überprüfen Sie die Antwort im unteren Bereich der Swagger UI.
 
@@ -124,8 +125,8 @@ Die folgende Tabelle zeigt die möglichen API-Anfragen:
 | `DELETE` | `/api/users/{userId}`                      | Einen Benutzer löschen                     | -                    | Nein                   |
 | `GET`    | `/api/users/{userId}/expenses`             | Alle Ausgaben eines Benutzers abrufen      | -                    | Ja                     |
 | `GET`    | `/api/users/{userId}/expenses/{expenseId}` | Eine bestimmte Ausgabe abrufen             | -                    | Ja                     |
-| `POST`   | `/api/users/{userId}/expenses`             | Eine neue Ausgabe hinzufügen               | `{ "category": "Food", "value": 50.0, "currency": "EUR" }` | Nein                   |
-| `PUT`    | `/api/users/{userId}/expenses/{expenseId}` | Eine bestehende Ausgabe aktualisieren      | `{ "category": "Transport", "value": 60.0, "currency": "USD" }` | Nein                   |
+| `POST`   | `/api/users/{userId}/expenses`             | Eine neue Ausgabe hinzufügen               | `{ "category": "FOOD", "value": 50.0, "currency": "EUR" }` | Nein                   |
+| `PUT`    | `/api/users/{userId}/expenses/{expenseId}` | Eine bestehende Ausgabe aktualisieren      | `{ "category": "TRANSPORT", "value": 60.0, "currency": "USD" }` | Nein                   |
 | `DELETE` | `/api/users/{userId}/expenses/{expenseId}` | Eine Ausgabe löschen                       | -                    | Nein                   |
 | `GET`    | `/api/users/{userId}/categories/sum`       | Gesamtausgaben nach Kategorie abrufen      | -                    | Ja                     |
 | `GET`    | `/api/users/{userId}/categories/{category}`| Ausgaben für eine bestimmte Kategorie abrufen | -                | Ja                     |
