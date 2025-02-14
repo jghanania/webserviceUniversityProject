@@ -15,8 +15,10 @@ import edu.fra.uas.repository.ExpenseRepository;
 
 /**
  * ExpenseService class provides business logic related to managing expenses.
- * It interacts with the ExpenseRepository to create, read, update, and delete expense data.
- * Additionally, it performs aggregate operations, such as calculating the total expenses by category and currency.
+ * It interacts with the ExpenseRepository to create, read, update, and delete
+ * expense data.
+ * Additionally, it performs aggregate operations, such as calculating the total
+ * expenses by category and currency.
  */
 @Service
 public class ExpenseService {
@@ -121,7 +123,8 @@ public class ExpenseService {
 
         List<Expense> filteredExpenses = new ArrayList<>(); // List to store filtered expenses
         for (Expense expense : expenseRepository.values()) {
-            // If the expense category is in the list of specified categories, add it to the list
+            // If the expense category is in the list of specified categories, add it to the
+            // list
             if (categories.contains(expense.getCategory()) && expense.getUser() == user) {
                 filteredExpenses.add(expense);
             }
@@ -136,15 +139,17 @@ public class ExpenseService {
      * - Currency
      * - Total value of expenses for that category and currency.
      * 
-     * @return A list of CategoryTotal objects, each representing the total value of expenses by category and currency.
+     * @return A list of CategoryTotal objects, each representing the total value of
+     *         expenses by category and currency.
      */
     public List<CategoryTotal> getTotalExpensesByCategory(int user) {
         log.debug("getTotalExpensesByCategoryForUser: user: {}", user);
-        
+
         // Map to hold the total expenses grouped by category and currency
         Map<String, Double> categoryCurrencyTotals = new HashMap<>();
-    
-        // Iterate through all expenses and aggregate their values by category and currency
+
+        // Iterate through all expenses and aggregate their values by category and
+        // currency
         for (Expense expense : expenseRepository.values()) {
             if (expense.getUser() == user) {
                 // Create a unique key combining the category and currency to group the totals
@@ -157,7 +162,7 @@ public class ExpenseService {
             }
 
         }
-    
+
         // Convert the map entries into CategoryTotal objects
         List<CategoryTotal> totals = new ArrayList<>();
         for (Map.Entry<String, Double> entry : categoryCurrencyTotals.entrySet()) {
@@ -168,7 +173,7 @@ public class ExpenseService {
             // Add a new CategoryTotal object with the computed total value
             totals.add(new CategoryTotal(category, currency, entry.getValue()));
         }
-    
+
         return totals;
     }
 }

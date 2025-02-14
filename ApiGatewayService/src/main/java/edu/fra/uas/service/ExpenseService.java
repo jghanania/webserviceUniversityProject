@@ -3,6 +3,7 @@ package edu.fra.uas.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.fra.uas.model.Expense;
+import edu.fra.uas.model.ExpenseUpdateRequest;
 import edu.fra.uas.model.CategoryTotal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +29,7 @@ public class ExpenseService {
     private String expenseServiceUrl;
 
     // Fetch an expense using GraphQL query
-    public Expense getExpenseById(Long userId, Long expenseId) throws Exception {
+    public Expense getExpenseById(Long expenseId) throws Exception {
         String query = String.format(
             "{\"query\":\"query MyQuery {\\n  expenseById(id: \\\"%d\\\") {\\n    category\\n    currency\\n    id\\n    user\\n    value\\n  }\\n}\",\"operationName\":\"MyQuery\"}",
             expenseId
@@ -48,6 +49,25 @@ public class ExpenseService {
         Map<String, Object> data = (Map<String, Object>) response.get("data");
         return objectMapper.convertValue(data.get("expenseById"), Expense.class);
     }
+
+
+    // Update a specific expense
+    public Expense updateExpense(Long userId, Long expenseId, ExpenseUpdateRequest expenseUpdate, Expense expenseToUpdate) throws Exception {
+        String mutation = String.format(
+        "{\"query\":\"mutation MyMutation {\\n  updateExpense(id: \\\"%d\\\", user: %d, category: \\\"%s\\\", currency: \\\"%s\\\", value: %f) {\\n    id\\n    user\\n    category\\n    currency\\n    value\\n  }\\n}\",\"operationName\":\"MyMutation\"}",
+        expenseId, userId, 
+        expenseUpdate.getCategory() != null ? expenseUpdate.getCategory() : expenseToUpdate.getCategory(), 
+        expenseUpdate.getCurrency() != null ? expenseUpdate.getCurrency() : expenseToUpdate.getCurrency(), 
+        expenseUpdate.getValue() != null ? expenseUpdate.getValue() : expenseToUpdate.getValue()
+    );
+
+        Map<String, Object> response = executeGraphQL(mutation);
+
+        // Extract the updated Expense from the response
+        Map<String, Object> data = (Map<String, Object>) response.get("data");
+        return objectMapper.convertValue(data.get("updateExpense"), Expense.class);
+    }
+    
 
     // Fetch all expenses for a user
     public List<Expense> getAllExpensesForUser(Long userId) throws Exception {

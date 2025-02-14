@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import edu.fra.uas.service.*;
 import edu.fra.uas.model.CategoryTotal;
 import edu.fra.uas.model.Expense;
+import edu.fra.uas.model.ExpenseUpdateRequest;
 import edu.fra.uas.model.User;
 
 @RestController
@@ -69,13 +70,13 @@ public class ApiGatewayController {
     @DeleteMapping(value = "/users/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteUser(@PathVariable("userId") Long userId) {
         log.debug("Deleting user with ID {}", userId);
-        
+
         boolean deleted = userService.deleteUser(userId);
-        
+
         if (!deleted) {
             return ResponseEntity.notFound().build(); // Return 404 when not found
         }
-    
+
         return ResponseEntity.noContent().build(); // 204 No Content on successful deletion
     }
 
@@ -86,7 +87,12 @@ public class ApiGatewayController {
             @RequestParam(value = "currency", required = false) String currency) throws Exception {
 
         // Validate if the user exists
-        userService.validateUserExists(userId);
+        Boolean userExist = userService.validateUserExists(userId);
+
+        if (!userExist) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User does not exist"));
+        }
 
         log.debug("Fetching all expenses for user {}", userId);
 
@@ -114,12 +120,17 @@ public class ApiGatewayController {
             @RequestParam(value = "currency", required = false) String currency) throws Exception {
 
         // Validate if the user exists
-        userService.validateUserExists(userId);
+        Boolean userExist = userService.validateUserExists(userId);
+
+        if (!userExist) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User does not exist"));
+        }
 
         log.debug("Fetching expense with ID {} for user {}", expenseId, userId);
 
         // Call the ExpenseService's GraphQL endpoint to fetch the expense
-        Expense expense = expenseService.getExpenseById(userId, expenseId);
+        Expense expense = expenseService.getExpenseById(expenseId);
 
         // If currency is provided, modify the expense by converting it
         if (currency != null && !currency.isEmpty()) {
@@ -134,6 +145,48 @@ public class ApiGatewayController {
         return ResponseEntity.ok(expense);
     }
 
+    // Update a specific expense using GraphQL from ExpenseService
+    @PutMapping(value = "/users/{userId}/expenses/{expenseId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateExpense(
+            @PathVariable("userId") Long userId,
+            @PathVariable("expenseId") Long expenseId,
+            @RequestBody ExpenseUpdateRequest expenseUpdate) throws Exception {
+
+        // Validate if the user exists
+        Boolean userExist = userService.validateUserExists(userId);
+
+        if (!userExist) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User does not exist"));
+        }
+
+        Expense expenseToUpdate = expenseService.getExpenseById(expenseId);
+
+        if (expenseToUpdate == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Expense not found")); // Return 404 when not found
+        }
+
+        if (expenseToUpdate.getUser() != userId) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "You are not the user who created this resource."));
+        }
+
+        log.debug("Updating expense with ID {} for user {}", expenseId, userId);
+
+        // Call the ExpenseService's method to update the expense
+        Expense updatedExpense = expenseService.updateExpense(userId, expenseId, expenseUpdate, expenseToUpdate);
+
+        // Build the location URI for the updated resource
+        URI location = ServletUriComponentsBuilder
+        .fromCurrentRequest()
+        .buildAndExpand(updatedExpense.getId())  // Assuming getId() returns the updated expense ID
+        .toUri();
+
+        // Return response with location header
+        return ResponseEntity.ok()
+            .location(location)  // Set the Location header
+            .body(updatedExpense);  // Include the updated expense in the response
+    }
+
     // Get total expenses by category from ExpenseService
     @GetMapping(value = "/users/{userId}/categories/sum", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTotalExpensesByCategory(
@@ -141,7 +194,12 @@ public class ApiGatewayController {
             @RequestParam(value = "currency", required = false) String currency) throws Exception {
 
         // Validate if the user exists
-        userService.validateUserExists(userId);
+        Boolean userExist = userService.validateUserExists(userId);
+
+        if (!userExist) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User does not exist"));
+        }
 
         log.debug("Fetching total expenses by category for user {}", userId);
         // Call the ExpenseService to get total expenses by category
@@ -166,7 +224,12 @@ public class ApiGatewayController {
             @RequestParam(value = "currency", required = false) String currency) throws Exception {
 
         // Validate if the user exists
-        userService.validateUserExists(userId);
+        Boolean userExist = userService.validateUserExists(userId);
+
+        if (!userExist) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User does not exist"));
+        }
 
         log.debug("Fetching expenses for category {} for user {}", category, userId);
         // Call the ExpenseService to fetch expenses by category
@@ -183,12 +246,18 @@ public class ApiGatewayController {
         return ResponseEntity.ok(response);
     }
 
+    // Create new expense
     @PostMapping(value = "/users/{userId}/expenses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addExpense(@PathVariable("userId") Long userId, @RequestBody Expense expense)
             throws Exception {
 
         // Validate if the user exists
-        userService.validateUserExists(userId);
+        Boolean userExist = userService.validateUserExists(userId);
+
+        if (!userExist) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User does not exist"));
+        }
 
         log.debug("Adding new expense for user {}: {}", userId, expense);
 
@@ -219,7 +288,12 @@ public class ApiGatewayController {
             @PathVariable("expenseId") Long expenseId) throws Exception {
 
         // Validate if the user exists
-        userService.validateUserExists(userId);
+        Boolean userExist = userService.validateUserExists(userId);
+
+        if (!userExist) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User does not exist"));
+        }
 
         log.debug("Deleting expense with ID {} for user {}", expenseId, userId);
 

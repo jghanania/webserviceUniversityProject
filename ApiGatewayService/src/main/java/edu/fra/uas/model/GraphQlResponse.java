@@ -4,6 +4,11 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 
 import java.util.Map;
 
+/**
+ * Represents a generic response structure for GraphQL queries and mutations.
+ * This class is used to dynamically map GraphQL response data into a Java
+ * object.
+ */
 public class GraphQlResponse {
     private Map<String, Object> data;
 
@@ -16,4 +21,3 @@ public class GraphQlResponse {
         return data;
     }
 }
-

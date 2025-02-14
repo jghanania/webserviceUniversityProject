@@ -10,6 +10,7 @@ import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import edu.fra.uas.model.CategoryTotal;
 import edu.fra.uas.model.Expense;
@@ -38,7 +39,7 @@ public class ExpensesController {
     @QueryMapping(name = "expenseById")
     public Expense getExpenseById(@Argument Long id) {
         log.debug("getExpenseById() is called");
-        
+
         return expenseService.getExpenseById(id);
     }
 
@@ -58,14 +59,16 @@ public class ExpensesController {
 
     /**
      * Handles the "totalExpensesByCategory" GraphQL query.
-     * Calculates the total value of expenses for each category and currency combination.
+     * Calculates the total value of expenses for each category and currency
+     * combination.
      *
-     * @return A list of category totals, each including the category, currency, and total value.
+     * @return A list of category totals, each including the category, currency, and
+     *         total value.
      */
     @QueryMapping(name = "totalExpensesByCategory")
     public List<CategoryTotal> getTotalExpensesByCategory(@Argument int user) {
         log.debug("getTotalExpensesByCategory() is called with user: {}", user);
-        
+
         return expenseService.getTotalExpensesByCategory(user);
     }
 
@@ -73,15 +76,21 @@ public class ExpensesController {
      * Handles the "addExpense" GraphQL mutation.
      * Creates a new expense with the provided details.
      *
-     * @param user The user ID associated with the expense.
+     * @param user     The user ID associated with the expense.
      * @param category The category of the expense.
-     * @param value The monetary value of the expense.
+     * @param value    The monetary value of the expense.
      * @param currency The currency of the expense.
      * @return The newly created expense.
      */
     @MutationMapping
-    public Expense addExpense(@Argument int user, @Argument String category, @Argument double value, @Argument String currency) {
-        log.debug("addExpense() is called with user: {}, category: {}, value: {}, currency: {}", user, category, value, currency);
+    public Expense addExpense(
+            @Argument int user,
+            @Argument String category,
+            @Argument double value,
+            @Argument String currency) {
+
+        log.debug("addExpense() is called with user: {}, category: {}, value: {}, currency: {}", user, category, value,
+                currency);
 
         // Create a new Expense object and populate its fields
         Expense expense = new Expense();
@@ -93,6 +102,7 @@ public class ExpensesController {
         // Save the expense using the service and return the result
         return expenseService.createExpense(expense);
     }
+
     /**
      * Handles the "allExpenses" GraphQL query.
      * Retrieves all expenses stored in the repository.
@@ -107,6 +117,49 @@ public class ExpensesController {
             return expenseService.getAllExpensesFromUser(user);
         }
         return expenseService.getAllExpenses();
+    }
+
+    /**
+     * Updates an existing expense with the provided details.
+     *
+     * @param user     The ID of the user attempting to update the expense.
+     * @param id       The unique identifier of the expense to be updated.
+     * @param category (Optional) The new category of the expense.
+     * @param value    (Optional) The new value of the expense.
+     * @param currency (Optional) The new currency of the expense.
+     * @return The updated {@link Expense} object if the update is successful,
+     *         otherwise {@code null}.
+     */
+    @MutationMapping
+    public Expense updateExpense(
+            @Argument int user,
+            @Argument Long id,
+            @Argument Optional<String> category,
+            @Argument Optional<Double> value,
+            @Argument Optional<String> currency) {
+
+        log.debug("updateExpense() is called with user: {}, id: {}, category: {}, value: {}, currency: {}",
+                user, id, category.orElse(null), value.orElse(null), currency.orElse(null));
+
+        // Fetch the existing expense from the database
+        Expense existingExpense = expenseService.getExpenseById(id);
+
+        // if Expense doesn't exist return null
+        if (existingExpense == null) {
+            return null;
+        }
+
+        // Ensure that the expense belongs to the correct user
+        if (existingExpense.getUser() != user) {
+            return null;
+        }
+
+        // Update only provided fields
+        category.ifPresent(existingExpense::setCategory);
+        value.ifPresent(existingExpense::setValue);
+        currency.ifPresent(existingExpense::setCurrency);
+
+        return expenseService.updateExpense(existingExpense);
     }
 
     /**
